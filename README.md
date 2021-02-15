@@ -1,1 +1,1 @@
-# WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification
+# WEKA-AWS-Hadoop-EMR-MapReduce-Hebrew-Syntactic-Similarity-Classification
