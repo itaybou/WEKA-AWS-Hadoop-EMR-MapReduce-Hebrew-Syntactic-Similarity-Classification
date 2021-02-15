@@ -4,8 +4,8 @@ WEKA/AWS/Hadoop Elastic Map Reduce application to measure and classify word pair
 Project GitHub repository link:
 https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification
 
-Google English Syntactic Biarcs path: **https://storage.googleapis.com/books/syntactic-ngrams/index.html** 
-Assignment Syntactic Biarcs S3 path: **s3://assignment3dsp/biarcs/**
+- Google English Syntactic Biarcs path: **https://storage.googleapis.com/books/syntactic-ngrams/index.html**
+- Assignment Syntactic Biarcs S3 path: **s3://assignment3dsp/biarcs/**
 
 ## Created by:  
 ### Itay Bouganim : 305278384  
@@ -13,12 +13,12 @@ Assignment Syntactic Biarcs S3 path: **s3://assignment3dsp/biarcs/**
 ## 
 ## Table of contents
 * [General info](#general-info)
-* [Statistics](#Statistics)
-* [Word-Analysis](#Word-Analysis)
-* [Project workflow and summary](#project-workflow-and-summary)
 * [Setup](#setup)
 * [Instructions](#Instructions)
-* [Examples And Resources](#Examples-And-Resources)
+* [Project workflow and Map-Reduce design](#project-workflow-and-Map-Reduce-design)
+* [Comunication & Statistics](#communication-and-statistics)
+* [Classification Results](#classification-results)
+* [Results Analysis](#results-analysis)
 
 
 ## General info
@@ -43,6 +43,52 @@ Where:
 EC2 instances used:
 Workers - 
  * Machine types - (64-bit x86) type: M4_LARGE
+ 
+## Setup
+1. Install aws cli in your operating system, for more information click here :
+https://aws.amazon.com/cli/
+
+2. Configure your amazon aws credentials in your .aws directory, alternatively you can set your credentials by using aws cli : 
+write in your cmd - "aws config".
+
+
+## Instructions
+
+1. Inside the project directory compile the project using the command : ```mvn package```.
+
+2. Create in the project target directory file named "inputs.txt".
+
+3. Create input bucket and output bucket (you can use the same bucket and create only one bucket) in AWS S3.
+
+4. 
+
+5. Fill 
+```
+<input-bucket> <input-jar-file-name> <input-golden-standard> <upload-jar-and-golden-standard>
+<corpus-input-path>
+<output-bucket>
+<corpus-files-count>
+<worker-instance-count>
+<calculate-measures> <measures-path>
+<output-co-occurrence-vectors>
+<run-classifier> <classifier-output-path> <optional-classifier-input-path>
+<delete-after-finished>
+```
+- ```<input-bucket>``` - Is the bucket the jar file ```<input-jar-file-name>``` is located in.  
+- ```<output-bucket>``` - Is the bucket the job will store outputs in **(Will be deleted after the job is completed!)**, Can be the same as input bucket.  
+- ```<worker-instance-count (0 < x < 10)>``` - The EC2 instance count that will be used for the map-reduce job (value between 0 excluding and 9 including)  
+- ```<use-local-aggregation (true or false)>``` - Wether the job will use Combiners for local aggregation in order to lower network overhead.  
+- ```<single-file (true or false)>``` - Whether to output single sorted output file (slower) or multiple sorted output files (faster).  
+
+5. Make sure your input text file located in the project target directory or in the same directory as the WordPedictionRunner jar file.
+
+6. The application should be run as follows:  
+	```java -jar WordPedictionRunner.jar ```  
+
+***IMPORTANT NOTES:***
+ - The application automatically uploads the input jar provided in the ```inputs.txt``` file to the input bucket provided in the ```inputs.txt``` file.
+ - When the job is finished the output result and log-files will be automatically downloaded to the directory the ```java -jar WordPedictionRunner.jar ``` was ran from.
+ - The output bucket provided in the ```inputs.txt``` file will be automatically deleted.
 
 ## Statistics:
 
@@ -216,7 +262,7 @@ Using the python script in the statistics directory the following statstics char
 | Decision     | A very good prediction was given in this case. | As we expect all  top 5 prediction are about answers to some form of questions | The first prediction is a very common  hebrew phrase. | Not as we expected we would expect the 4th prediction to be the first one. | We would expect the 3rd prediction to be the first and the 4th prediction to be switched with the fifth one since the fifth is more common nowdays. |
 
 
-## Project workflow and summary
+## Project workflow and Map-Reduce design
 
 We have only one step that include 5 map-reduce jobs, the following jobs are :
 
@@ -349,46 +395,6 @@ The following jobs do not include optional Combiner:
 	division operation in order to calculate the deleted estimation probability
 	which is not an associative operation.
 - **Sort deleted estimation output -** Sort operation only, no use for combiner.
-
-## Setup
-1. Install aws cli in your operating system, for more information click here :
-https://aws.amazon.com/cli/
-
-2. Configure your amazon aws credentials in your .aws directory, alternatively you can set your credentials by using aws cli : 
-write in your cmd - "aws config".
-
-
-## Instructions
-
-1. Inside the project directory compile the project using the command : ```mvn package```.
-
-2. Create in the project target directory file named "inputs.txt".
-
-3. Create input bucket and output bucket (u can use the same bucket and create only one bucket) in AWS S3.
-
-4. Put your input bucket, input jar file name (the WordPrediction jar file located in project target directory), output bucket, instace count (the number of EC2 instances you want to run) and true/false value for local aggregation inside the "inputs.txt" file in the following format:
-```
-<input-bucket> <input-jar-file-name>
-<output-bucket>
-<worker-instance-count (0 < x < 10)>
-<use-local-aggregation (true or false)>
-<single-file (true or false)>
-```
-- ```<input-bucket>``` - Is the bucket the jar file ```<input-jar-file-name>``` is located in.  
-- ```<output-bucket>``` - Is the bucket the job will store outputs in **(Will be deleted after the job is completed!)**, Can be the same as input bucket.  
-- ```<worker-instance-count (0 < x < 10)>``` - The EC2 instance count that will be used for the map-reduce job (value between 0 excluding and 9 including)  
-- ```<use-local-aggregation (true or false)>``` - Wether the job will use Combiners for local aggregation in order to lower network overhead.  
-- ```<single-file (true or false)>``` - Whether to output single sorted output file (slower) or multiple sorted output files (faster).  
-
-5. Make sure your input text file located in the project target directory or in the same directory as the WordPedictionRunner jar file.
-
-6. The application should be run as follows:  
-	```java -jar WordPedictionRunner.jar ```  
-
-***IMPORTANT NOTES:***
- - The application automatically uploads the input jar provided in the ```inputs.txt``` file to the input bucket provided in the ```inputs.txt``` file.
- - When the job is finished the output result and log-files will be automatically downloaded to the directory the ```java -jar WordPedictionRunner.jar ``` was ran from.
- - The output bucket provided in the ```inputs.txt``` file will be automatically deleted.
 
 ## Examples And Resources
 - After compiling the project - project JAR files can be found in the projects target directory.
