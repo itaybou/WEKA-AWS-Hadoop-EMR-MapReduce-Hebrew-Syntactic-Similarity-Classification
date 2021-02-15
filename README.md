@@ -1,10 +1,11 @@
 # WEKA-AWS-Hadoop-EMR-MapReduce-Hebrew-Syntactic-Similarity-Classification
-AWS/Hadoop Elastic Map Reduce application to calculate deleted estimation probability on hebrew 3grams
+WEKA/AWS/Hadoop Elastic Map Reduce application to measure and classify word pair similarity 
 
 Project GitHub repository link:
-https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation
+https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification
 
-Hebrew 3gram S3 path: **s3n://datasets.elasticmapreduce/ngrams/books/20090715/heb-all/3gram/data**
+Google English Syntactic Biarcs path: **https://storage.googleapis.com/books/syntactic-ngrams/index.html** 
+Assignment Syntactic Biarcs S3 path: **s3://assignment3dsp/biarcs/**
 
 ## Created by:  
 ### Itay Bouganim : 305278384  
