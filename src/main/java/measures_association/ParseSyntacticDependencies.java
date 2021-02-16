@@ -28,10 +28,10 @@ public class ParseSyntacticDependencies {
    */
   public static class MapperClass extends Mapper<LongWritable, Text, Text, LongWritable> {
 
-    private static final Pattern ENG_REGEX = Pattern.compile("[a-z]+");
+    private static final Pattern ENG_REGEX = Pattern.compile("[a-z-]+");
     private PorterStemmer stemmer;
 
-    protected void setup(Context context) throws IOException, InterruptedException {
+    protected void setup(Context context) {
       stemmer = new PorterStemmer();
     }
 

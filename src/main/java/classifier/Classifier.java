@@ -31,7 +31,7 @@ public class Classifier {
             if(classifierData.numInstances() < K_FOLDS) {
                 k = classifierData.numInstances();
             }
-            //System.out.println(classifierData.instance(2));
+
             System.out.println("\nClassifier Input Data Structure:\n===============================\n" + source.getStructure());
             System.out.println("Initializing Random Forest classifier with " + k + "-folds cross validation.");
             classifierData.setClassIndex(classifierData.numAttributes() - 1); // the classification attribute is last attribute in the ARFF file
@@ -41,38 +41,31 @@ public class Classifier {
 
             System.out.println("Training & Evaluating Random Forest classifier.");
             // Train
-            PlainText predictions = new PlainText();
-            predictions.setHeader(classifierData);
-            predictions.setBuffer(new StringBuffer());
-            evaluation.crossValidateModel(randomForestClassifier, classifierData, k, new Random(1), predictions, new Range("1"), true);
+            evaluation.crossValidateModel(randomForestClassifier, classifierData, k, new Random(1));
 
             System.out.println("Training & Evaluation completed. Outputting Summary and Prediction files.");
-            writeResultsToFile(classifierOutputPath, evaluation, classifierData, randomForestClassifier);
+            writeResultsToFile(classifierOutputPath, evaluation);
             System.out.println("Classification and Evaluation done.");
         } catch (Exception e) {
             System.err.println("Failed to run classifier.\n" + e.getMessage());
         }
     }
 
-    public static void writeResultsToFile(String outputPath, Evaluation eval, Instances testData, RandomForest classifier)
+    public static void writeResultsToFile(String outputPath, Evaluation eval)
     {
         String outputSummaryFile = String.format("%s/%s", outputPath, CLASSIFIER_SUMMARY_FILE);
-        try {
-            PrintWriter writer = new PrintWriter(outputSummaryFile, "UTF-8");
-            writer.println((eval.toSummaryString(("\nClassifier Results\n========================\n"), true)));
+        try (PrintWriter writer = new PrintWriter(outputSummaryFile, "UTF-8")) {
+            writer.println((eval.toSummaryString(("\nWEKA Random Forest Classifier Results\n===============================================\n"), true)));
             writer.println("F1 Measure: " + eval.fMeasure(1));
             writer.println("Precision: " + eval.precision(1));
-            writer.println("Recall: " + eval.recall(1));
-            writer.println();
+            writer.println("Recall: " + eval.recall(1) + "\n");
             writer.println("True-Positive rate: " + eval.truePositiveRate(1));
             writer.println("False-Positive rate: " + eval.falsePositiveRate(1));
             writer.println("True-Negative rate: " + eval.trueNegativeRate(1));
-            writer.println("False-Negative rate: " + eval.falseNegativeRate(1));
-            writer.println();
+            writer.println("False-Negative rate: " + eval.falseNegativeRate(1) + "\n");
             writer.println(eval.toClassDetailsString());
             writer.println(eval.toMatrixString());
-            writer.println("========================");
-            writer.close();
+            writer.println("===============================================");
             System.out.println("Classification Summary file can be found at: " + outputSummaryFile);
         }
         catch (IOException e) {

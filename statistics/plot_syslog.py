@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import re
 import pandas as pd
 
-jobs = ['Parse Syntactic Dependencies', 'Order And Count Lexeme Feature', 'Calculate Measures Of\nAssociation With Context', 'Calculate Measures Of\nVector Similarity']
+jobs = ['Parse Syntactic Dependencies', 'Order And Count Lexeme Feature', 'Calculate Measures Of Association With Context', 'Calculate Measures Of Vector Similarity']
 statistics = ['Map input records', 'Map output records', 'Combine input records', 'Combine output records', 'Reduce input records', 'Reduce output records']
 byte_statistics = ['Map output bytes', 'Reduce shuffle bytes', 'Bytes Read', 'Bytes Written']
 all_statistics = statistics + byte_statistics
@@ -68,8 +68,8 @@ def plot_bytes_statistics(value):
 
 print(f'Total lexemes read from corpus: {lexeme_counter_value}')
 print(f'Total features read from corpus: {feature_counter_value}')
-plot_in_out_statistics(value='10files')
-# plot_in_out_statistics(value='No_combiner')
+plot_in_out_statistics(value='2files')
+plot_in_out_statistics(value='14files')
 
-plot_bytes_statistics(value='10files')
-# plot_bytes_statistics(value='No_combiner')
+plot_bytes_statistics(value='2files')
+plot_bytes_statistics(value='14files')
