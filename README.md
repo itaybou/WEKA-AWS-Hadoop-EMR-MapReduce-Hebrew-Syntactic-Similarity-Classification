@@ -88,10 +88,10 @@ The output vector for each lexeme will have the following shape:
 
 #### Stage 3 - Similarity Vectors Classification (Similar or Not-Similar)
 In this stage we use Random Forest classifier in order te perform a supervised learning task on our pre-labeled word pairs from the golden standard.  
-The input for our RF classifier is the similarity vectors for the word pairs from the golden standard produced in the previous stage and the output is the True-Positive, False-Positive, True-Negative and True-Positive rates.
-We use 10-fold cross validation method in order to evaluate our model performance (which trains 10 iterations of the model by using a different portion of the training data as testing data in each iteration).
+The input for our RF classifier is the similarity vectors for the word pairs from the golden standard produced in the previous stage and the output is the **True-Positive, False-Positive, True-Negative and True-Positive rates**.
+We use **10-fold cross validation** method in order to evaluate our model performance (which trains 10 iterations of the model by using a different portion of the training data as testing data in each iteration).
 ![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
-We also output the Precision, Recall and F1 measurments where:
+We also output the **Precision, Recall and F1 measurments** where:
 ![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
 ![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
 ![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
