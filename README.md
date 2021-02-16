@@ -16,7 +16,7 @@ https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Cl
 * [Setup](#setup)
 * [Instructions](#Instructions)
 * [Project workflow and Map-Reduce design](#project-workflow-and-Map-Reduce-design)
-* [Comunication & Statistics](#communication-and-statistics)
+* [Comunication & Statistics](#communication-&-statistics)
 * [Classification Results](#classification-results)
 * [Results Analysis](#results-analysis)
 
