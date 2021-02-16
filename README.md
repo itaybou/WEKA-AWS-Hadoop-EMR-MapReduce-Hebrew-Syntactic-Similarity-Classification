@@ -121,153 +121,121 @@ write in your cmd - "aws config".
  - When the job is finished the output result and log-files will be automatically downloaded to the directory the ```java -jar WordPedictionRunner.jar ``` was ran from.
  - The output bucket provided in the ```inputs.txt``` file will be automatically deleted.
 
-## Statistics:
+## Comunication & Statistics:
 
 Using the python script in the statistics directory the following statstics charts were produced from the output log-files:
 
-#### Total ngrams read from corpus: *245866641*
+### Using 2 Files from the Google English Syntactic Biarcs corpus
+Total lexemes read from corpus: 704071870 (```count(L)```)  
+Total features read from corpus: 802056549 (```count(F)```)
 
-### Input Output Records Statistics:
-*With local aggregation using a Combiner:*
+#### Input Output Records Statistics:
 ![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
-|    | Status   | Statistic              | Stage                        |     Value |
-|----|----------|------------------------|------------------------------|-----------|
-|  0 | Combiner | Map input records      | Split Corpus                 | 163471963 |
-|  1 | Combiner | Map output records     | Split Corpus                 |  71298947 |
-|  2 | Combiner | Combine input records  | Split Corpus                 |  71298947 |
-|  3 | Combiner | Combine output records | Split Corpus                 |   3382828 |
-|  4 | Combiner | Reduce input records   | Split Corpus                 |   3382828 |
-|  5 | Combiner | Reduce output records  | Split Corpus                 |   1691386 |
-|  6 | Combiner | Map input records      | Aggregate Nr                 |   1691386 |
-|  7 | Combiner | Map output records     | Aggregate Nr                 |   3382772 |
-|  8 | Combiner | Combine input records  | Aggregate Nr                 |   3382772 |
-|  9 | Combiner | Combine output records | Aggregate Nr                 |     35483 |
-| 10 | Combiner | Reduce input records   | Aggregate Nr                 |     35483 |
-| 11 | Combiner | Reduce output records  | Aggregate Nr                 |      6888 |
-| 12 | Combiner | Map input records      | Aggregate Tr                 |   1691386 |
-| 13 | Combiner | Map output records     | Aggregate Tr                 |   3382772 |
-| 14 | Combiner | Combine input records  | Aggregate Tr                 |   3382772 |
-| 15 | Combiner | Combine output records | Aggregate Tr                 |     35483 |
-| 16 | Combiner | Reduce input records   | Aggregate Tr                 |     35483 |
-| 17 | Combiner | Reduce output records  | Aggregate Tr                 |      6888 |
-| 18 | Combiner | Map input records      | Join Nr Tr 3grams            |   1705162 |
-| 19 | Combiner | Map output records     | Join Nr Tr 3grams            |   6779320 |
-| 20 | Combiner | Combine input records  | Join Nr Tr 3grams            |         0 |
-| 21 | Combiner | Combine output records | Join Nr Tr 3grams            |         0 |
-| 22 | Combiner | Reduce input records   | Join Nr Tr 3grams            |   6779320 |
-| 23 | Combiner | Reduce output records  | Join Nr Tr 3grams            |   6760704 |
-| 24 | Combiner | Map input records      | Calculate deleted estimation |   6760704 |
-| 25 | Combiner | Map output records     | Calculate deleted estimation |   6760704 |
-| 26 | Combiner | Combine input records  | Calculate deleted estimation |         0 |
-| 27 | Combiner | Combine output records | Calculate deleted estimation |         0 |
-| 28 | Combiner | Reduce input records   | Calculate deleted estimation |   6760704 |
-| 29 | Combiner | Reduce output records  | Calculate deleted estimation |   1690176 |
-| 30 | Combiner | Map input records      | Sort deleted estimation      |   1690176 |
-| 31 | Combiner | Map output records     | Sort deleted estimation      |   1690176 |
-| 32 | Combiner | Combine input records  | Sort deleted estimation      |         0 |
-| 33 | Combiner | Combine output records | Sort deleted estimation      |         0 |
-| 34 | Combiner | Reduce input records   | Sort deleted estimation      |   1690176 |
-| 35 | Combiner | Reduce output records  | Sort deleted estimation      |   1690176 |
 
-*Without local aggregation:*
+|    | Status   | Statistic              | Stage                                          |    Value |
+|----|----------|------------------------|------------------------------------------------|----------|
+|  0 | 2files   | Map input records      | Parse Syntactic Dependencies                   | 33382028 |
+|  1 | 2files   | Map output records     | Parse Syntactic Dependencies                   | 73804771 |
+|  2 | 2files   | Combine input records  | Parse Syntactic Dependencies                   | 73804771 |
+|  3 | 2files   | Combine output records | Parse Syntactic Dependencies                   |  7594149 |
+|  4 | 2files   | Reduce input records   | Parse Syntactic Dependencies                   |  7594149 |
+|  5 | 2files   | Reduce output records  | Parse Syntactic Dependencies                   |  4237086 |
+|  6 | 2files   | Map input records      | Order And Count Lexeme Feature                 |  4237086 |
+|  7 | 2files   | Map output records     | Order And Count Lexeme Feature                 |  4237086 |
+|  8 | 2files   | Combine input records  | Order And Count Lexeme Feature                 |        0 |
+|  9 | 2files   | Combine output records | Order And Count Lexeme Feature                 |        0 |
+| 10 | 2files   | Reduce input records   | Order And Count Lexeme Feature                 |  4237086 |
+| 11 | 2files   | Reduce output records  | Order And Count Lexeme Feature                 |  4140401 |
+| 12 | 2files   | Map input records      | Calculate Measures Of Association With Context |  4140401 |
+| 13 | 2files   | Map output records     | Calculate Measures Of Association With Context |  4140401 |
+| 14 | 2files   | Combine input records  | Calculate Measures Of Association With Context |        0 |
+| 15 | 2files   | Combine output records | Calculate Measures Of Association With Context |        0 |
+| 16 | 2files   | Reduce input records   | Calculate Measures Of Association With Context |  4140401 |
+| 17 | 2files   | Reduce output records  | Calculate Measures Of Association With Context |  3732246 |
+| 18 | 2files   | Map input records      | Calculate Measures Of Vector Similarity        |  3732246 |
+| 19 | 2files   | Map output records     | Calculate Measures Of Vector Similarity        |  7604638 |
+| 20 | 2files   | Combine input records  | Calculate Measures Of Vector Similarity        |        0 |
+| 21 | 2files   | Combine output records | Calculate Measures Of Vector Similarity        |        0 |
+| 22 | 2files   | Reduce input records   | Calculate Measures Of Vector Similarity        |  7604638 |
+| 23 | 2files   | Reduce output records  | Calculate Measures Of Vector Similarity        |    13245 |
+
+#### Bytes Records Statistics:
 ![No Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_No_Combiner.png)
-|    | Status      | Statistic              | Stage                        |     Value |
-|----|-------------|------------------------|------------------------------|-----------|
-|  0 | No_combiner | Map input records      | Split Corpus                 | 163471963 |
-|  1 | No_combiner | Map output records     | Split Corpus                 |  71298947 |
-|  2 | No_combiner | Combine input records  | Split Corpus                 |         0 |
-|  3 | No_combiner | Combine output records | Split Corpus                 |         0 |
-|  4 | No_combiner | Reduce input records   | Split Corpus                 |  71298947 |
-|  5 | No_combiner | Reduce output records  | Split Corpus                 |   1691386 |
-|  6 | No_combiner | Map input records      | Aggregate Nr                 |   1691386 |
-|  7 | No_combiner | Map output records     | Aggregate Nr                 |   3382772 |
-|  8 | No_combiner | Combine input records  | Aggregate Nr                 |         0 |
-|  9 | No_combiner | Combine output records | Aggregate Nr                 |         0 |
-| 10 | No_combiner | Reduce input records   | Aggregate Nr                 |   3382772 |
-| 11 | No_combiner | Reduce output records  | Aggregate Nr                 |      6888 |
-| 12 | No_combiner | Map input records      | Aggregate Tr                 |   1691386 |
-| 13 | No_combiner | Map output records     | Aggregate Tr                 |   3382772 |
-| 14 | No_combiner | Combine input records  | Aggregate Tr                 |         0 |
-| 15 | No_combiner | Combine output records | Aggregate Tr                 |         0 |
-| 16 | No_combiner | Reduce input records   | Aggregate Tr                 |   3382772 |
-| 17 | No_combiner | Reduce output records  | Aggregate Tr                 |      6888 |
-| 18 | No_combiner | Map input records      | Join Nr Tr 3grams            |   1705162 |
-| 19 | No_combiner | Map output records     | Join Nr Tr 3grams            |   6779320 |
-| 20 | No_combiner | Combine input records  | Join Nr Tr 3grams            |         0 |
-| 21 | No_combiner | Combine output records | Join Nr Tr 3grams            |         0 |
-| 22 | No_combiner | Reduce input records   | Join Nr Tr 3grams            |   6779320 |
-| 23 | No_combiner | Reduce output records  | Join Nr Tr 3grams            |   6760704 |
-| 24 | No_combiner | Map input records      | Calculate deleted estimation |   6760704 |
-| 25 | No_combiner | Map output records     | Calculate deleted estimation |   6760704 |
-| 26 | No_combiner | Combine input records  | Calculate deleted estimation |         0 |
-| 27 | No_combiner | Combine output records | Calculate deleted estimation |         0 |
-| 28 | No_combiner | Reduce input records   | Calculate deleted estimation |   6760704 |
-| 29 | No_combiner | Reduce output records  | Calculate deleted estimation |   1690176 |
-| 30 | No_combiner | Map input records      | Sort deleted estimation      |   1690176 |
-| 31 | No_combiner | Map output records     | Sort deleted estimation      |   1690176 |
-| 32 | No_combiner | Combine input records  | Sort deleted estimation      |         0 |
-| 33 | No_combiner | Combine output records | Sort deleted estimation      |         0 |
-| 34 | No_combiner | Reduce input records   | Sort deleted estimation      |   1690176 |
-| 35 | No_combiner | Reduce output records  | Sort deleted estimation      |   1690176 |
 
-### Bytes Records Statistics:
-*With local aggregation using a Combiner:*
-![Combiner Bytes Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/Bytes_Combiner.png)
-|    | Status   | Statistic            | Stage                        |      Value |
-|----|----------|----------------------|------------------------------|------------|
-|  0 | Combiner | Map output bytes     | Split Corpus                 | 2904394883 |
-|  1 | Combiner | Reduce shuffle bytes | Split Corpus                 |   46291167 |
-|  2 | Combiner | Bytes Read           | Split Corpus                 | 1604717521 |
-|  3 | Combiner | Bytes Written        | Split Corpus                 |   53148120 |
-|  4 | Combiner | Map output bytes     | Aggregate Nr                 |   67655440 |
-|  5 | Combiner | Reduce shuffle bytes | Aggregate Nr                 |     252266 |
-|  6 | Combiner | Bytes Read           | Aggregate Nr                 |   53148120 |
-|  7 | Combiner | Bytes Written        | Aggregate Nr                 |      77152 |
-|  8 | Combiner | Map output bytes     | Aggregate Tr                 |   71038212 |
-|  9 | Combiner | Reduce shuffle bytes | Aggregate Tr                 |     357304 |
-| 10 | Combiner | Bytes Read           | Aggregate Tr                 |   53148120 |
-| 11 | Combiner | Bytes Written        | Aggregate Tr                 |     104256 |
-| 12 | Combiner | Map output bytes     | Join Nr Tr 3grams            |  303260254 |
-| 13 | Combiner | Reduce shuffle bytes | Join Nr Tr 3grams            |   71665074 |
-| 14 | Combiner | Bytes Read           | Join Nr Tr 3grams            |          0 |
-| 15 | Combiner | Bytes Written        | Join Nr Tr 3grams            |  244579055 |
-| 16 | Combiner | Map output bytes     | Calculate deleted estimation |  254474420 |
-| 17 | Combiner | Reduce shuffle bytes | Calculate deleted estimation |   78985568 |
-| 18 | Combiner | Bytes Read           | Calculate deleted estimation |  244579055 |
-| 19 | Combiner | Bytes Written        | Calculate deleted estimation |   79261113 |
-| 20 | Combiner | Map output bytes     | Sort deleted estimation      |   80951289 |
-| 21 | Combiner | Reduce shuffle bytes | Sort deleted estimation      |   31586567 |
-| 22 | Combiner | Bytes Read           | Sort deleted estimation      |   79261113 |
-| 23 | Combiner | Bytes Written        | Sort deleted estimation      |   79261113 |
+|    | Status   | Statistic            | Stage                                          |      Value |
+|----|----------|----------------------|------------------------------------------------|------------|
+|  0 | 2files   | Map output bytes     | Parse Syntactic Dependencies                   | 1558130249 |
+|  1 | 2files   | Reduce shuffle bytes | Parse Syntactic Dependencies                   |   91646025 |
+|  2 | 2files   | Bytes Read           | Parse Syntactic Dependencies                   |          0 |
+|  3 | 2files   | Bytes Written        | Parse Syntactic Dependencies                   |   33253030 |
+|  4 | 2files   | Map output bytes     | Order And Count Lexeme Feature                 |  193711966 |
+|  5 | 2files   | Reduce shuffle bytes | Order And Count Lexeme Feature                 |   62976319 |
+|  6 | 2files   | Bytes Read           | Order And Count Lexeme Feature                 |   33253030 |
+|  7 | 2files   | Bytes Written        | Order And Count Lexeme Feature                 |   34643634 |
+|  8 | 2files   | Map output bytes     | Calculate Measures Of Association With Context |  215170779 |
+|  9 | 2files   | Reduce shuffle bytes | Calculate Measures Of Association With Context |   74235914 |
+| 10 | 2files   | Bytes Read           | Calculate Measures Of Association With Context |   34643634 |
+| 11 | 2files   | Bytes Written        | Calculate Measures Of Association With Context |  133121186 |
+| 12 | 2files   | Map output bytes     | Calculate Measures Of Vector Similarity        |  636086316 |
+| 13 | 2files   | Reduce shuffle bytes | Calculate Measures Of Vector Similarity        |  255931083 |
+| 14 | 2files   | Bytes Read           | Calculate Measures Of Vector Similarity        |  133121186 |
+| 15 | 2files   | Bytes Written        | Calculate Measures Of Vector Similarity        |    5762026 |
 
-*Without local aggregation:*
-![No Combiner Bytes Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/Bytes_No_Combiner.png)
-|    | Status      | Statistic            | Stage                        |      Value |
-|----|-------------|----------------------|------------------------------|------------|
-|  0 | No_combiner | Map output bytes     | Split Corpus                 | 2904394883 |
-|  1 | No_combiner | Reduce shuffle bytes | Split Corpus                 |  333643124 |
-|  2 | No_combiner | Bytes Read           | Split Corpus                 | 1604672340 |
-|  3 | No_combiner | Bytes Written        | Split Corpus                 |   53148120 |
-|  4 | No_combiner | Map output bytes     | Aggregate Nr                 |   67655440 |
-|  5 | No_combiner | Reduce shuffle bytes | Aggregate Nr                 |    3702246 |
-|  6 | No_combiner | Bytes Read           | Aggregate Nr                 |   53148120 |
-|  7 | No_combiner | Bytes Written        | Aggregate Nr                 |      77152 |
-|  8 | No_combiner | Map output bytes     | Aggregate Tr                 |   71038212 |
-|  9 | No_combiner | Reduce shuffle bytes | Aggregate Tr                 |   11079153 |
-| 10 | No_combiner | Bytes Read           | Aggregate Tr                 |   53148120 |
-| 11 | No_combiner | Bytes Written        | Aggregate Tr                 |     104256 |
-| 12 | No_combiner | Map output bytes     | Join Nr Tr 3grams            |  303260254 |
-| 13 | No_combiner | Reduce shuffle bytes | Join Nr Tr 3grams            |   71665074 |
-| 14 | No_combiner | Bytes Read           | Join Nr Tr 3grams            |          0 |
-| 15 | No_combiner | Bytes Written        | Join Nr Tr 3grams            |  244579055 |
-| 16 | No_combiner | Map output bytes     | Calculate deleted estimation |  254474420 |
-| 17 | No_combiner | Reduce shuffle bytes | Calculate deleted estimation |   78985568 |
-| 18 | No_combiner | Bytes Read           | Calculate deleted estimation |  244579055 |
-| 19 | No_combiner | Bytes Written        | Calculate deleted estimation |   79261113 |
-| 20 | No_combiner | Map output bytes     | Sort deleted estimation      |   80951289 |
-| 21 | No_combiner | Reduce shuffle bytes | Sort deleted estimation      |   31586567 |
-| 22 | No_combiner | Bytes Read           | Sort deleted estimation      |   79261113 |
-| 23 | No_combiner | Bytes Written        | Sort deleted estimation      |   79261113 |
+### Using 14 Files from the Google English Syntactic Biarcs corpus
+Total lexemes read from corpus: 704071870 (```count(L)```)  
+Total features read from corpus: 802056549 (```count(F)```)
+
+#### Input Output Records Statistics:
+![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
+
+|    | Status   | Statistic              | Stage                                          |    Value |
+|----|----------|------------------------|------------------------------------------------|----------|
+|  0 | 2files   | Map input records      | Parse Syntactic Dependencies                   | 33382028 |
+|  1 | 2files   | Map output records     | Parse Syntactic Dependencies                   | 73804771 |
+|  2 | 2files   | Combine input records  | Parse Syntactic Dependencies                   | 73804771 |
+|  3 | 2files   | Combine output records | Parse Syntactic Dependencies                   |  7594149 |
+|  4 | 2files   | Reduce input records   | Parse Syntactic Dependencies                   |  7594149 |
+|  5 | 2files   | Reduce output records  | Parse Syntactic Dependencies                   |  4237086 |
+|  6 | 2files   | Map input records      | Order And Count Lexeme Feature                 |  4237086 |
+|  7 | 2files   | Map output records     | Order And Count Lexeme Feature                 |  4237086 |
+|  8 | 2files   | Combine input records  | Order And Count Lexeme Feature                 |        0 |
+|  9 | 2files   | Combine output records | Order And Count Lexeme Feature                 |        0 |
+| 10 | 2files   | Reduce input records   | Order And Count Lexeme Feature                 |  4237086 |
+| 11 | 2files   | Reduce output records  | Order And Count Lexeme Feature                 |  4140401 |
+| 12 | 2files   | Map input records      | Calculate Measures Of Association With Context |  4140401 |
+| 13 | 2files   | Map output records     | Calculate Measures Of Association With Context |  4140401 |
+| 14 | 2files   | Combine input records  | Calculate Measures Of Association With Context |        0 |
+| 15 | 2files   | Combine output records | Calculate Measures Of Association With Context |        0 |
+| 16 | 2files   | Reduce input records   | Calculate Measures Of Association With Context |  4140401 |
+| 17 | 2files   | Reduce output records  | Calculate Measures Of Association With Context |  3732246 |
+| 18 | 2files   | Map input records      | Calculate Measures Of Vector Similarity        |  3732246 |
+| 19 | 2files   | Map output records     | Calculate Measures Of Vector Similarity        |  7604638 |
+| 20 | 2files   | Combine input records  | Calculate Measures Of Vector Similarity        |        0 |
+| 21 | 2files   | Combine output records | Calculate Measures Of Vector Similarity        |        0 |
+| 22 | 2files   | Reduce input records   | Calculate Measures Of Vector Similarity        |  7604638 |
+| 23 | 2files   | Reduce output records  | Calculate Measures Of Vector Similarity        |    13245 |
+
+#### Bytes Records Statistics:
+![No Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_No_Combiner.png)
+
+|    | Status   | Statistic            | Stage                                          |      Value |
+|----|----------|----------------------|------------------------------------------------|------------|
+|  0 | 2files   | Map output bytes     | Parse Syntactic Dependencies                   | 1558130249 |
+|  1 | 2files   | Reduce shuffle bytes | Parse Syntactic Dependencies                   |   91646025 |
+|  2 | 2files   | Bytes Read           | Parse Syntactic Dependencies                   |          0 |
+|  3 | 2files   | Bytes Written        | Parse Syntactic Dependencies                   |   33253030 |
+|  4 | 2files   | Map output bytes     | Order And Count Lexeme Feature                 |  193711966 |
+|  5 | 2files   | Reduce shuffle bytes | Order And Count Lexeme Feature                 |   62976319 |
+|  6 | 2files   | Bytes Read           | Order And Count Lexeme Feature                 |   33253030 |
+|  7 | 2files   | Bytes Written        | Order And Count Lexeme Feature                 |   34643634 |
+|  8 | 2files   | Map output bytes     | Calculate Measures Of Association With Context |  215170779 |
+|  9 | 2files   | Reduce shuffle bytes | Calculate Measures Of Association With Context |   74235914 |
+| 10 | 2files   | Bytes Read           | Calculate Measures Of Association With Context |   34643634 |
+| 11 | 2files   | Bytes Written        | Calculate Measures Of Association With Context |  133121186 |
+| 12 | 2files   | Map output bytes     | Calculate Measures Of Vector Similarity        |  636086316 |
+| 13 | 2files   | Reduce shuffle bytes | Calculate Measures Of Vector Similarity        |  255931083 |
+| 14 | 2files   | Bytes Read           | Calculate Measures Of Vector Similarity        |  133121186 |
+| 15 | 2files   | Bytes Written        | Calculate Measures Of Vector Similarity        |    5762026 |
 
 
 ## Word Analysis
