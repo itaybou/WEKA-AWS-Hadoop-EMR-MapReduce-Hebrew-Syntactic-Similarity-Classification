@@ -16,7 +16,7 @@ https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Cl
 * [Setup](#setup)
 * [Instructions](#Instructions)
 * [Project workflow and Map-Reduce design](#project-workflow-and-Map-Reduce-design)
-* [Comunication And Statistics](#communication-and-statistics)
+* [Communication & Statistics](#communication-&-statistics)
 * [Classification Results](#classification-results)
 * [Results Analysis](#results-analysis)
 
@@ -121,7 +121,7 @@ write in your cmd - "aws config".
  - When the job is finished the output result and log-files will be automatically downloaded to the directory the ```java -jar WordPedictionRunner.jar ``` was ran from.
  - The output bucket provided in the ```inputs.txt``` file will be automatically deleted.
 
-## Comunication And Statistics:
+## Communication & Statistics:
 
 Using the python script in the statistics directory the following statstics charts were produced from the output log-files:
 
@@ -147,7 +147,7 @@ Total features read from corpus: 802056549 (```count(F)```)
 | 10 | 2files   | Reduce input records   | Order And Count Lexeme Feature                 |  4237086 |
 | 11 | 2files   | Reduce output records  | Order And Count Lexeme Feature                 |  4140401 |
 | 12 | 2files   | Map input records      | Calculate Measures Of Association With Context |  4140401 |
-| 13 | 2files   | Map output records     | Calculate Measures Of Association With Context |  4140401 |
+| 13 | 2files   | Map output andrecords     | Calculate Measures Of Association With Context |  4140401 |
 | 14 | 2files   | Combine input records  | Calculate Measures Of Association With Context |        0 |
 | 15 | 2files   | Combine output records | Calculate Measures Of Association With Context |        0 |
 | 16 | 2files   | Reduce input records   | Calculate Measures Of Association With Context |  4140401 |
