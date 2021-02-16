@@ -1,7 +1,7 @@
 # WEKA-AWS-Hadoop-EMR-MapReduce-Hebrew-Syntactic-Similarity-Classification
 WEKA/AWS/Hadoop Elastic Map Reduce application to measure and classify word pair similarity 
 
-Project GitHub repository link:
+Project GitHub repository link:  
 https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification
 
 - Google English Syntactic Biarcs path: **https://storage.googleapis.com/books/syntactic-ngrams/index.html**
@@ -12,7 +12,7 @@ https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Cl
 ### Sahar Vaya : 205583453  
 ## 
 ## Table of contents
-* [General info](#general-info)
+* [General info and stages](#general-info-and-stages)
 * [Setup](#setup)
 * [Instructions](#Instructions)
 * [Project workflow and Map-Reduce design](#project-workflow-and-Map-Reduce-design)
@@ -21,12 +21,42 @@ https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Cl
 * [Results Analysis](#results-analysis)
 
 
-## General info
+## General info And Stages
 
-In this assignment you will generate a knowledge-base for Hebrew word-prediction system, based on Google 3-Gram Hebrew dataset, using Amazon Elastic Map-Reduce (EMR). The produced knowledge-base indicates the probability of each word trigram found in the corpus.
-The project goal is to predict the most probable third word for every hebrew 2 word combination by using the deleted estimation method.
+This assignment follows the paper from Ljubešić et al.: [Comparing Measures of Semantic Similarity](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/resources/comparing-measures-of-semantic-similarity.pdf) with some modifications.  
+In this assignment we will perform **3** stages in order to determine whether two words are similar:
+1. We will generate 4 syntactic relatedness co-occurrence vectors for every lexeme from the given Google English Syntactic Biarcs corpus.<br/>The features for each lexeme will be pairs of the feature word and the sentence dependency (e.g subject, noun etc.).<br/>Each vector will contain different ***meausre of assocation*** between the lexeme and the syntactic features related to that lexeme in the syntactic sentence tree so that each vector will be a syntactic representation of the lexeme by using the features it is connected to in the corpus.
+2. We will then use a pre-defined golden standard word-pairs set and ***measure the similarity*** of their representing 4 co-occurrence vectors calculated in the previous stage.<br/>The similarity will be measured by using 6 different methods used to calculate the distance between those vectors and the output will be a vector of size 24 (4 association methods x 6 similarity methods) representing the similarity between the word pair.
+3. Then we will use a classical ML Random Forest algorithm (Supervised learning) by using WEKA Java package in order to ***classify*** the similarity vectors produced and compare the results to the pre-classified word-pairs in the golden standard.
 
-### Deleted estimation method
+We will be using Amazon Elastic Map-Reduce (EMR) in order to compute the first two stages out of the input corpus.  
+The produced output of the Map-Reduce stages will be the word-pair similaritry vectors.  
+For the third stage we will use the Java WEKA package in order to train and evaluate our classifier based on the labeld word-pairs given in the golden standard.
+
+
+#### Stage 1 - Measures Of Association With Context
+Measures of association with context are used to compute values that are included in the co-occurrence vectors.  
+These values are based on the frequencies of lexemes and features extracted from corpus.
+In this assignment we will use 4 different methods to calculate the measures of association producing 4 different co-occurrence vectors for each lexeme in the corpus with values relevant to each of the association methods.
+
+The association methods are:
+1. **Plain Frequency** - ```count(L=l, F=f)``` the amount of times that lexeme ```l``` appeared with feature ```f``` in the corpus.
+2. **Relative Frequency** - ```P(F=f | L=l)``` the amount of times that lexeme ```l``` appeared with feature ```f``` divided by the total amount of appearences of lexeme ```l``` (So we will get a normalized vector relative to the appearences of the lexeme).<br/>Meaning that ```P(F=f | L=l) = count(L=l, F=f) / count(L=l)``` and ```count(L=l)``` is the frequency of lexeme ```l``` in the corpus.
+3. **Pointwise Mutual Information (PMI)** - ```log_2(P(L=l, F=f) / (P(L=l) * P(F=f)))``` where ```P(L=l, F=f)``` equals ```count(L=l, F=f) / count(L)``` and ```count(L)``` is the total numbers of appearences of different lexemes in the corpus.<br/>This measure computes how often a lexeme ```l``` and a feature ```f``` co-occur, compared with what would be expected if they were independent.
+
+#### Stage 2 - Measures Of Vector Similarity
+Deleted estimation method is a held out method.
+The deleted estimation method, uses a form of two-way cross validation, as follows:
+![Deleted Estimation method](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/resources/deleted_estimation.png)
+
+Where:
+- N is the number of n-grams in the whole corpus.
+- Nr0 is the number of n-grams occuring r times in the first part of the corpus.
+- Tr01 is the total number of those n-grams from the first part (those of Nr0) in the second part of the corpus.
+- Nr1 is the number of n-grams occuring r times in the second part of the corpus.
+- Tr10 is the total number of those n-grams from the second part (those of Nr1) in the first part of the corpus.
+
+#### Stage 3 - Similarity Vectors Classification (Similar or Not-Similar)
 Deleted estimation method is a held out method.
 The deleted estimation method, uses a form of two-way cross validation, as follows:
 ![Deleted Estimation method](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/resources/deleted_estimation.png)
