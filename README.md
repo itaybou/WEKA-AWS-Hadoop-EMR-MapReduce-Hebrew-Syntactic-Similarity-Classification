@@ -16,7 +16,7 @@ https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Cl
 * [Setup](#setup)
 * [Instructions](#Instructions)
 * [Project workflow and Map-Reduce design](#project-workflow-and-Map-Reduce-design)
-* [Communication & Statistics](#communication-&-statistics)
+* [Communication And Statistics](#communication-and-statistics)
 * [Classification Results](#classification-results)
 * [Results Analysis](#results-analysis)
 
@@ -121,7 +121,7 @@ write in your cmd - "aws config".
  - When the job is finished the output result and log-files will be automatically downloaded to the directory the ```java -jar WordPedictionRunner.jar ``` was ran from.
  - The output bucket provided in the ```inputs.txt``` file will be automatically deleted.
 
-## Communication & Statistics:
+## Communication And Statistics:
 
 Using the python script in the statistics directory the following statstics charts were produced from the output log-files:
 
