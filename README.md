@@ -121,7 +121,7 @@ write in your cmd - "aws config".
  - When the job is finished the output result and log-files will be automatically downloaded to the directory the ```java -jar WordPedictionRunner.jar ``` was ran from.
  - The output bucket provided in the ```inputs.txt``` file will be automatically deleted.
 
-## Comunication & Statistics:
+## Comunication And Statistics:
 
 Using the python script in the statistics directory the following statstics charts were produced from the output log-files:
 
