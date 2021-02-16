@@ -16,12 +16,12 @@ https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Cl
 * [Setup](#setup)
 * [Instructions](#Instructions)
 * [Project workflow and Map-Reduce design](#project-workflow-and-Map-Reduce-design)
-* [Comunication & Statistics](#communication-&-statistics)
+* [Comunication And Statistics](#communication-and-statistics)
 * [Classification Results](#classification-results)
 * [Results Analysis](#results-analysis)
 
 
-## General info And Stages
+## General Info And Stages
 
 This assignment follows the paper from Ljubešić et al.: [Comparing Measures of Semantic Similarity](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/resources/comparing-measures-of-semantic-similarity.pdf) with some modifications.  
 In this assignment we will perform **3** stages in order to determine whether two words are similar:
