@@ -155,6 +155,8 @@ Using the python script in the statistics directory the following statstics char
 Total lexemes read from corpus: 704071870 (```count(L)```)  
 Total features read from corpus: 802056549 (```count(F)```)
 
+Total number of word-pairs in the golden standard: 13254
+
 #### Input Output Records Statistics:
 ![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
 
