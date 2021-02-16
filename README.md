@@ -50,7 +50,7 @@ Measures of vector similarity are used to compare two vectors, ie. lexemes built
 In this assignment we will use 6 different methods to calculate the similarity between co-occurrence vectors producing, for each lexeme in the golden standard, a single vector with length 24 (4 measure association x 6 similarity measures).
 
 The 6 similarity measured used are:  
-***l1 and l2 are the co-occurrence vectors corrosponding with word 1 and word 2 in the word pair***
+***```l1``` and ```l2``` are the co-occurrence vectors corrosponding with word 1 and word 2 in the compared word pair.***
 1. **Manhattan Distance** - Calculates the distance between vectors on all dimensions: ```sum(abs(l1[i] - l2[i]))```.
 2. **Euclidean Distance** - Measures the geometric distance between the two vectors: ```sqrt(sum((l1[i] - l2[i])^2))```.
 3. **Cosine Distance** - A measure used in information retrieval is the dot product operator from linear algebra.<br/>If the vectors are normalized, that measure is equal to the cosine between the two vectors.<br/>The cosine similarity measure is computed by ```(sum(l1[i] * l2[i]) / (sqrt(sum(l1[i]^2)) * sqrt(sum(l2[i]^2))))```.
@@ -87,17 +87,14 @@ The output vector for each lexeme will have the following shape:
 ```
 
 #### Stage 3 - Similarity Vectors Classification (Similar or Not-Similar)
-Deleted estimation method is a held out method.
-The deleted estimation method, uses a form of two-way cross validation, as follows:
-![Deleted Estimation method](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/resources/deleted_estimation.png)
-
-Where:
-- N is the number of n-grams in the whole corpus.
-- Nr0 is the number of n-grams occuring r times in the first part of the corpus.
-- Tr01 is the total number of those n-grams from the first part (those of Nr0) in the second part of the corpus.
-- Nr1 is the number of n-grams occuring r times in the second part of the corpus.
-- Tr10 is the total number of those n-grams from the second part (those of Nr1) in the first part of the corpus.
-
+In this stage we use Random Forest classifier in order te perform a supervised learning task on our pre-labeled word pairs from the golden standard.  
+The input for our RF classifier is the similarity vectors for the word pairs from the golden standard produced in the previous stage and the output is the True-Positive, False-Positive, True-Negative and True-Positive rates.
+We use 10-fold cross validation method in order to evaluate our model performance (which trains 10 iterations of the model by using a different portion of the training data as testing data in each iteration).
+![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
+We also output the Precision, Recall and F1 measurments where:
+![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
+![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
+![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
 
 ### Additonal information
 EC2 instances used:
