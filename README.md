@@ -39,23 +39,52 @@ Measures of association with context are used to compute values that are include
 These values are based on the frequencies of lexemes and features extracted from corpus.
 In this assignment we will use 4 different methods to calculate the measures of association producing 4 different co-occurrence vectors for each lexeme in the corpus with values relevant to each of the association methods.
 
-The association methods are:
+The 4 association methods used are:
 1. **Plain Frequency** - ```count(L=l, F=f)``` the amount of times that lexeme ```l``` appeared with feature ```f``` in the corpus.
 2. **Relative Frequency** - ```P(F=f | L=l)``` the amount of times that lexeme ```l``` appeared with feature ```f``` divided by the total amount of appearences of lexeme ```l``` (So we will get a normalized vector relative to the appearences of the lexeme).<br/>Meaning that ```P(F=f | L=l) = count(L=l, F=f) / count(L=l)``` and ```count(L=l)``` is the amount of time that lexeme ```l``` appeared in the corpus.
 3. **Pointwise Mutual Information (PMI)** - ```log_2(P(L=l, F=f) / (P(L=l) * P(F=f)))``` where ```P(L=l, F=f) = count(L=l, F=f) / count(L)```,  ```count(L)``` is the total number of appearences of different lexemes in the corpus, ```P(L=l)``` is the frequency of lexeme ```l``` in the corpus (```count(L=l) / count(L)```) and ```P(F=f)``` is the frequency of feature ```f``` in the corpus (```count(F=f) / count(F)```).<br/>This measure computes how often a lexeme ```l``` and a feature ```f``` co-occur, compared with what would be expected if they were independent.
 4. **T-Test Measure** - ```(P(L=l, F=f) - (P(L=l) * P(F=f))) / sqrt((P(L=l) * P(F=f)))``` where ```P(L=l, F=f) = count(L=l, F=f) / count(L)```, ```P(L=l)``` is the frequency of lexeme ```l``` in the corpus (```count(L=l) / count(L)```) and ```P(F=f)``` is the frequency of feature ```f``` in the corpus (```count(F=f) / count(F)```).<br/>Is a statistic measurment which attempts to capture the same intuition as pointwise mutual information statistic which computes the difference between observed and expected means, normalized by the variance.
 
 #### Stage 2 - Measures Of Vector Similarity
-Deleted estimation method is a held out method.
-The deleted estimation method, uses a form of two-way cross validation, as follows:
-![Deleted Estimation method](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/resources/deleted_estimation.png)
+Measures of vector similarity are used to compare two vectors, ie. lexemes built from association measures for features used to describe the lexemes.
+In this assignment we will use 6 different methods to calculate the similarity between co-occurrence vectors producing, for each lexeme in the golden standard, a single vector with length 24 (4 measure association x 6 similarity measures).
 
-Where:
-- N is the number of n-grams in the whole corpus.
-- Nr0 is the number of n-grams occuring r times in the first part of the corpus.
-- Tr01 is the total number of those n-grams from the first part (those of Nr0) in the second part of the corpus.
-- Nr1 is the number of n-grams occuring r times in the second part of the corpus.
-- Tr10 is the total number of those n-grams from the second part (those of Nr1) in the first part of the corpus.
+The 6 similarity measured used are:  
+***l1 and l2 are the co-occurrence vectors corrosponding with word 1 and word 2 in the word pair***
+1. **Manhattan Distance** - Calculates the distance between vectors on all dimensions: ```sum(abs(l1[i] - l2[i]))```.
+2. **Euclidean Distance** - Measures the geometric distance between the two vectors: ```sqrt(sum((l1[i] - l2[i])^2))```.
+3. **Cosine Distance** - A measure used in information retrieval is the dot product operator from linear algebra.<br/>If the vectors are normalized, that measure is equal to the cosine between the two vectors.<br/>The cosine similarity measure is computed by ```(sum(l1[i] * l2[i]) / (sqrt(sum(l1[i]^2)) * sqrt(sum(l2[i]^2))))```.
+4. **Jaccard Measure** - A measure that is derived from information retrieval.<br/>Divides the number of equal features with the number of features in general and extended to vectors with weighted associations as follows: ```(sum(min(l1[i], l2[i])) / sum(max(l1[i], l2[i])))```.
+5. **Dice Measure** - Very similar to the Jaccard measure and is also introduced from information retrieval.<br/>The equivalent of the Dice measure for weighted associations is computed as follows: ```((2 * sum(min(l1[i], l2[i]))) / sum(l1[i] + l2[i]))```.
+6. **Jensen-Shannon Divergence** - From the family of information-theoretic distributional similarity measures.<br/>The intuition of these methods is that two vectors ```l1``` and ```l2``` are similar to the extent that their probability distributions ```P(F=f|l1)``` and ```P(F=f|l2)``` are similar.<br/>We compare the two probability distributions by using the **Kullback-Leibler divergence** that is computed by: ```D(l||j) = sum(l[i] * log_10(l[i] / j[i]))```.<br/>To bypass the negative property (Since our co-occurrence vectors are inheritably sparse, meaning they contain a lot of zeros) we use the **Jensen-Shannon** divergence which is computed as follows: ```D(l1||(l1 + l2) / 2) + D(l2||(l1 + l2) / 2)```.<br/>by using both formulas we get that the Jensen-Shannon Divergence of vectors ```l1``` and ```l2``` is equal to: ```sum(l1[i] * log(l1[i] / ((l1[i] + l2[i]) / 2))) + sum(l2[i] * log(l2[i] / ((l1[i] + l2[i]) / 2)))```
+
+The output vector for each lexeme will have the following shape:
+```
+1 plain frequency vector - Manhattan distance
+2 plain frequency vector - Euclidean distance
+3 plain frequency vector - Cosine distance
+4 plain frequency vector - Jaccard measure
+5 plain frequency vector - Dice measure
+6 plain frequency vector - Jensen-Shannon divergence
+7 relative frequency vector - Manhattan distance
+8 relative frequency vector - Euclidean distance
+9 relative frequency vector - Cosine distance
+10 relative frequency vector - Jaccard measure
+11 relative frequency vector - Dice measure
+12 relative frequency vector - Jensen-Shannon divergence
+13 pointwise mutual information vector - Manhattan distance
+14 pointwise mutual information vector - Euclidean distance
+15 pointwise mutual information vector - Cosine distance
+16 pointwise mutual information vector - Jaccard measure
+17 pointwise mutual information vector - Dice measure
+18 pointwise mutual information vector - Jensen-Shannon divergence
+19 t-test statistic vector - Manhattan distance
+20 t-test statistic vector - Euclidean distance
+21 t-test statistic vector - Cosine distance
+22 t-test statistic vector - Jaccard measure
+23 t-test statistic vector - Dice measure
+24 t-test statistic vector- Jensen-Shannon divergence
+```
 
 #### Stage 3 - Similarity Vectors Classification (Similar or Not-Similar)
 Deleted estimation method is a held out method.
