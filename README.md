@@ -210,60 +210,62 @@ Total number of word-pairs in the golden standard: 13254
 | 15 | 2files   | Bytes Written        | Calculate Measures Of Vector Similarity        |    5762026 |
 
 ### Using 14 Files from the Google English Syntactic Biarcs corpus
-Total lexemes read from corpus: 704071870 (```count(L)```)  
-Total features read from corpus: 802056549 (```count(F)```)
+Total lexemes read from corpus: 8004073453 (```count(L)```)  
+Total features read from corpus: 9420023809 (```count(F)```)
+
+Total number of word-pairs in the golden standard: 13254
 
 #### Input Output Records Statistics:
 ![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
 
-|    | Status   | Statistic              | Stage                                          |    Value |
-|----|----------|------------------------|------------------------------------------------|----------|
-|  0 | 2files   | Map input records      | Parse Syntactic Dependencies                   | 33382028 |
-|  1 | 2files   | Map output records     | Parse Syntactic Dependencies                   | 73804771 |
-|  2 | 2files   | Combine input records  | Parse Syntactic Dependencies                   | 73804771 |
-|  3 | 2files   | Combine output records | Parse Syntactic Dependencies                   |  7594149 |
-|  4 | 2files   | Reduce input records   | Parse Syntactic Dependencies                   |  7594149 |
-|  5 | 2files   | Reduce output records  | Parse Syntactic Dependencies                   |  4237086 |
-|  6 | 2files   | Map input records      | Order And Count Lexeme Feature                 |  4237086 |
-|  7 | 2files   | Map output records     | Order And Count Lexeme Feature                 |  4237086 |
-|  8 | 2files   | Combine input records  | Order And Count Lexeme Feature                 |        0 |
-|  9 | 2files   | Combine output records | Order And Count Lexeme Feature                 |        0 |
-| 10 | 2files   | Reduce input records   | Order And Count Lexeme Feature                 |  4237086 |
-| 11 | 2files   | Reduce output records  | Order And Count Lexeme Feature                 |  4140401 |
-| 12 | 2files   | Map input records      | Calculate Measures Of Association With Context |  4140401 |
-| 13 | 2files   | Map output records     | Calculate Measures Of Association With Context |  4140401 |
-| 14 | 2files   | Combine input records  | Calculate Measures Of Association With Context |        0 |
-| 15 | 2files   | Combine output records | Calculate Measures Of Association With Context |        0 |
-| 16 | 2files   | Reduce input records   | Calculate Measures Of Association With Context |  4140401 |
-| 17 | 2files   | Reduce output records  | Calculate Measures Of Association With Context |  3732246 |
-| 18 | 2files   | Map input records      | Calculate Measures Of Vector Similarity        |  3732246 |
-| 19 | 2files   | Map output records     | Calculate Measures Of Vector Similarity        |  7604638 |
-| 20 | 2files   | Combine input records  | Calculate Measures Of Vector Similarity        |        0 |
-| 21 | 2files   | Combine output records | Calculate Measures Of Vector Similarity        |        0 |
-| 22 | 2files   | Reduce input records   | Calculate Measures Of Vector Similarity        |  7604638 |
-| 23 | 2files   | Reduce output records  | Calculate Measures Of Vector Similarity        |    13245 |
+|    | Status   | Statistic              | Stage                                          |     Value |
+|----|----------|------------------------|------------------------------------------------|-----------|
+|  0 | 14files  | Map input records      | Parse Syntactic Dependencies                   | 247503741 |
+|  1 | 14files  | Map output records     | Parse Syntactic Dependencies                   | 732517441 |
+|  2 | 14files  | Combine input records  | Parse Syntactic Dependencies                   | 732517441 |
+|  3 | 14files  | Combine output records | Parse Syntactic Dependencies                   |  72358125 |
+|  4 | 14files  | Reduce input records   | Parse Syntactic Dependencies                   |  72358125 |
+|  5 | 14files  | Reduce output records  | Parse Syntactic Dependencies                   |  23517782 |
+|  6 | 14files  | Map input records      | Order And Count Lexeme Feature                 |  23517782 |
+|  7 | 14files  | Map output records     | Order And Count Lexeme Feature                 |  23517782 |
+|  8 | 14files  | Combine input records  | Order And Count Lexeme Feature                 |         0 |
+|  9 | 14files  | Combine output records | Order And Count Lexeme Feature                 |         0 |
+| 10 | 14files  | Reduce input records   | Order And Count Lexeme Feature                 |  23517782 |
+| 11 | 14files  | Reduce output records  | Order And Count Lexeme Feature                 |  23169981 |
+| 12 | 14files  | Map input records      | Calculate Measures Of Association With Context |  23169981 |
+| 13 | 14files  | Map output records     | Calculate Measures Of Association With Context |  23169981 |
+| 14 | 14files  | Combine input records  | Calculate Measures Of Association With Context |         0 |
+| 15 | 14files  | Combine output records | Calculate Measures Of Association With Context |         0 |
+| 16 | 14files  | Reduce input records   | Calculate Measures Of Association With Context |  23169981 |
+| 17 | 14files  | Reduce output records  | Calculate Measures Of Association With Context |  21641792 |
+| 18 | 14files  | Map input records      | Calculate Measures Of Vector Similarity        |  21641792 |
+| 19 | 14files  | Map output records     | Calculate Measures Of Vector Similarity        |  49972240 |
+| 20 | 14files  | Combine input records  | Calculate Measures Of Vector Similarity        |         0 |
+| 21 | 14files  | Combine output records | Calculate Measures Of Vector Similarity        |         0 |
+| 22 | 14files  | Reduce input records   | Calculate Measures Of Vector Similarity        |  49972240 |
+| 23 | 14files  | Reduce output records  | Calculate Measures Of Vector Similarity        |     13254 |
 
 #### Bytes Records Statistics:
 ![No Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_No_Combiner.png)
 
-|    | Status   | Statistic            | Stage                                          |      Value |
-|----|----------|----------------------|------------------------------------------------|------------|
-|  0 | 2files   | Map output bytes     | Parse Syntactic Dependencies                   | 1558130249 |
-|  1 | 2files   | Reduce shuffle bytes | Parse Syntactic Dependencies                   |   91646025 |
-|  2 | 2files   | Bytes Read           | Parse Syntactic Dependencies                   |          0 |
-|  3 | 2files   | Bytes Written        | Parse Syntactic Dependencies                   |   33253030 |
-|  4 | 2files   | Map output bytes     | Order And Count Lexeme Feature                 |  193711966 |
-|  5 | 2files   | Reduce shuffle bytes | Order And Count Lexeme Feature                 |   62976319 |
-|  6 | 2files   | Bytes Read           | Order And Count Lexeme Feature                 |   33253030 |
-|  7 | 2files   | Bytes Written        | Order And Count Lexeme Feature                 |   34643634 |
-|  8 | 2files   | Map output bytes     | Calculate Measures Of Association With Context |  215170779 |
-|  9 | 2files   | Reduce shuffle bytes | Calculate Measures Of Association With Context |   74235914 |
-| 10 | 2files   | Bytes Read           | Calculate Measures Of Association With Context |   34643634 |
-| 11 | 2files   | Bytes Written        | Calculate Measures Of Association With Context |  133121186 |
-| 12 | 2files   | Map output bytes     | Calculate Measures Of Vector Similarity        |  636086316 |
-| 13 | 2files   | Reduce shuffle bytes | Calculate Measures Of Vector Similarity        |  255931083 |
-| 14 | 2files   | Bytes Read           | Calculate Measures Of Vector Similarity        |  133121186 |
-| 15 | 2files   | Bytes Written        | Calculate Measures Of Vector Similarity        |    5762026 |
+|    | Status   | Statistic            | Stage                                          |       Value |
+|----|----------|----------------------|------------------------------------------------|-------------|
+|  0 | 14files  | Map output bytes     | Parse Syntactic Dependencies                   | 15301600686 |
+|  1 | 14files  | Reduce shuffle bytes | Parse Syntactic Dependencies                   |   856642242 |
+|  2 | 14files  | Bytes Read           | Parse Syntactic Dependencies                   |           0 |
+|  3 | 14files  | Bytes Written        | Parse Syntactic Dependencies                   |   183754451 |
+|  4 | 14files  | Map output bytes     | Order And Count Lexeme Feature                 |  1097072386 |
+|  5 | 14files  | Reduce shuffle bytes | Order And Count Lexeme Feature                 |   336855026 |
+|  6 | 14files  | Bytes Read           | Order And Count Lexeme Feature                 |   183754451 |
+|  7 | 14files  | Bytes Written        | Order And Count Lexeme Feature                 |   193350284 |
+|  8 | 14files  | Map output bytes     | Calculate Measures Of Association With Context |  1241206109 |
+|  9 | 14files  | Reduce shuffle bytes | Calculate Measures Of Association With Context |   422812654 |
+| 10 | 14files  | Bytes Read           | Calculate Measures Of Association With Context |   193350284 |
+| 11 | 14files  | Bytes Written        | Calculate Measures Of Association With Context |   782690392 |
+| 12 | 14files  | Map output bytes     | Calculate Measures Of Vector Similarity        |  4136504326 |
+| 13 | 14files  | Reduce shuffle bytes | Calculate Measures Of Vector Similarity        |  1742580460 |
+| 14 | 14files  | Bytes Read           | Calculate Measures Of Vector Similarity        |   782690392 |
+| 15 | 14files  | Bytes Written        | Calculate Measures Of Vector Similarity        |     6584955 |
 
 
 ## Word Analysis
