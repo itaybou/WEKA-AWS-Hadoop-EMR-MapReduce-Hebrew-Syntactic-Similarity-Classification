@@ -4,6 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import re
 import pandas as pd
+import os
 
 jobs = ['Parse Syntactic Dependencies', 'Order And Count Lexeme Feature', 'Calculate Measures Of Association With Context', 'Calculate Measures Of Vector Similarity']
 statistics = ['Map input records', 'Map output records', 'Combine input records', 'Combine output records', 'Reduce input records', 'Reduce output records']
@@ -11,6 +12,7 @@ byte_statistics = ['Map output bytes', 'Reduce shuffle bytes', 'Bytes Read', 'By
 all_statistics = statistics + byte_statistics
 counters = ['LEXEME_COUNTER', 'FEATURE_COUNTER']
 
+os.chdir(join(os.getcwd(), 'statistics'))
 input_files = glob(join('.', 'syslog*'))
 
 stats_dict = {}
@@ -37,6 +39,7 @@ for file in input_files:
 
 df = pd.Series(stats_dict).reset_index()
 df.columns = ['Status', 'Statistic', 'Stage', 'Value']
+print(df)
 
 def display_figures(ax, stats, title):
    stats_index = 0
@@ -69,7 +72,7 @@ def plot_bytes_statistics(value):
 print(f'Total lexemes read from corpus: {lexeme_counter_value}')
 print(f'Total features read from corpus: {feature_counter_value}')
 plot_in_out_statistics(value='1file')
-#plot_in_out_statistics(value='14files')
+plot_in_out_statistics(value='15files')
 
 plot_bytes_statistics(value='1file')
-#plot_bytes_statistics(value='14files')
+plot_bytes_statistics(value='15files')

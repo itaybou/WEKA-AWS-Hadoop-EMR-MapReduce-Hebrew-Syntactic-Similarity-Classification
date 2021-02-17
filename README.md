@@ -32,7 +32,15 @@ In this assignment we will perform **3** stages in order to determine whether tw
 We will be using Amazon Elastic Map-Reduce (EMR) in order to compute the first two stages out of the input corpus.  
 The produced output of the Map-Reduce stages will be the word-pair similaritry vectors.  
 For the third stage we will use the Java WEKA package in order to train and evaluate our classifier based on the labeld word-pairs given in the golden standard.
+<br/><br/>
+#### Expirements:
+**We will perform 2 expirements on the classification reults classified on the produced similarty vectors:  
+Using 1 corpus file and using 15 corpus files from the Google English Syntactic Biarcs corpus.**
+We will show the statistics and classification results for both of the expirements in this summary file.
 
+#### Memory Assumptions:
+- We assume that the Golden Standard word pair classification file and the word-pair data it contains can be stored in the remote Map-Reduce EC2 instances memory.
+- We assume that the WEKA ARFF input file that includes the classification input similarity vectors data can be stored in memory.
 
 #### Stage 1 - Measures Of Association With Context
 Measures of association with context are used to compute values that are included in the co-occurrence vectors.  
@@ -98,8 +106,9 @@ We also output the **Precision, Recall and F1 measurments** where:
 ![F1](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/resources/f1.png)
 
 F-score or F-measure is a measure of a test's accuracy.  
-It is calculated from the precision and recall of the test, where the precision is the number of correctly identified positive results divided by the number of all positive results, including those not identified correctly, and the recall is the number of correctly identified positive results divided by the number of all samples that should have been identified as positive. 
-Precision is also known as positive predictive value, and recall is also known as sensitivity in diagnostic binary classification.  
+It is calculated from the precision and recall of the test.  
+**Precision** - also known as positive predictive value, is the number of correctly identified positive results divided by the number of all positive results, including those not identified correctly.  
+**Recall** - also known as sensitivity in diagnostic binary classification, is the number of correctly identified positive results divided by the number of all samples that should have been identified as positive.  
 **The F1 score is the harmonic mean of the precision and recall**.
 
 ### Additonal information
@@ -156,13 +165,13 @@ write in your cmd - "aws config".
 
 ## Communication And Statistics:
 
-Using the python script in the statistics directory the following statstics charts were produced from the output log-files:
+Comparing the communication and input-output/bytes statistics from both of the expirementes performed (1 corpus file vs. 15 corpus files) and using the python script in the statistics directory the following statstics charts were produced from the output log-files:
 
 ### Using 1 File from the Google English Syntactic Biarcs corpus
 Total lexemes read from corpus: 217575117 (```count(L)```)  
 Total features read from corpus: 227636582 (```count(F)```)
 
-Total number of word-pairs classified in the golden standard: 13254
+Total number of word-pairs classified in the golden standard: 13176
 
 #### Input Output Records Statistics:
 ![2-File Input Output Records Statistics](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/statistics/1files-input-output.png)
@@ -216,63 +225,63 @@ if (lexemePairs != null) {
 | 14 | 1file    | Bytes Read           | Calculate Measures Of Vector Similarity        |  59530793 |
 | 15 | 1file    | Bytes Written        | Calculate Measures Of Vector Similarity        |   5268428 |
 
-### Using 14 Files from the Google English Syntactic Biarcs corpus
-Total lexemes read from corpus: 8004073453 (```count(L)```)  
-Total features read from corpus: 9420023809 (```count(F)```)
+### Using 15 Files from the Google English Syntactic Biarcs corpus
+Total lexemes read from corpus: 8633837354 (```count(L)```)  
+Total features read from corpus: 10160658623 (```count(F)```)
 
 Total number of word-pairs classified in the golden standard: 13254
 
 #### Input Output Records Statistics:
-![14-File Input Output Records Statistics](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/statistics/14files-input-output.png)
+![15-File Input Output Records Statistics](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/statistics/15files-input-output.png)
 
 |    | Status   | Statistic              | Stage                                          |     Value |
 |----|----------|------------------------|------------------------------------------------|-----------|
-|  0 | 14files  | Map input records      | Parse Syntactic Dependencies                   | 247503741 |
-|  1 | 14files  | Map output records     | Parse Syntactic Dependencies                   | 732517441 |
-|  2 | 14files  | Combine input records  | Parse Syntactic Dependencies                   | 732517441 |
-|  3 | 14files  | Combine output records | Parse Syntactic Dependencies                   |  72358125 |
-|  4 | 14files  | Reduce input records   | Parse Syntactic Dependencies                   |  72358125 |
-|  5 | 14files  | Reduce output records  | Parse Syntactic Dependencies                   |  23517782 |
-|  6 | 14files  | Map input records      | Order And Count Lexeme Feature                 |  23517782 |
-|  7 | 14files  | Map output records     | Order And Count Lexeme Feature                 |  23517782 |
-|  8 | 14files  | Combine input records  | Order And Count Lexeme Feature                 |         0 |
-|  9 | 14files  | Combine output records | Order And Count Lexeme Feature                 |         0 |
-| 10 | 14files  | Reduce input records   | Order And Count Lexeme Feature                 |  23517782 |
-| 11 | 14files  | Reduce output records  | Order And Count Lexeme Feature                 |  23169981 |
-| 12 | 14files  | Map input records      | Calculate Measures Of Association With Context |  23169981 |
-| 13 | 14files  | Map output records     | Calculate Measures Of Association With Context |  23169981 |
-| 14 | 14files  | Combine input records  | Calculate Measures Of Association With Context |         0 |
-| 15 | 14files  | Combine output records | Calculate Measures Of Association With Context |         0 |
-| 16 | 14files  | Reduce input records   | Calculate Measures Of Association With Context |  23169981 |
-| 17 | 14files  | Reduce output records  | Calculate Measures Of Association With Context |  21641792 |
-| 18 | 14files  | Map input records      | Calculate Measures Of Vector Similarity        |  21641792 |
-| 19 | 14files  | Map output records     | Calculate Measures Of Vector Similarity        |  49972240 |
-| 20 | 14files  | Combine input records  | Calculate Measures Of Vector Similarity        |         0 |
-| 21 | 14files  | Combine output records | Calculate Measures Of Vector Similarity        |         0 |
-| 22 | 14files  | Reduce input records   | Calculate Measures Of Vector Similarity        |  49972240 |
-| 23 | 14files  | Reduce output records  | Calculate Measures Of Vector Similarity        |     13254 |
+|  0 | 15files  | Map input records      | Parse Syntactic Dependencies                   | 267275914 |
+|  1 | 15files  | Map output records     | Parse Syntactic Dependencies                   | 799988279 |
+|  2 | 15files  | Combine input records  | Parse Syntactic Dependencies                   | 799988279 |
+|  3 | 15files  | Combine output records | Parse Syntactic Dependencies                   |  79118593 |
+|  4 | 15files  | Reduce input records   | Parse Syntactic Dependencies                   |  79118593 |
+|  5 | 15files  | Reduce output records  | Parse Syntactic Dependencies                   |  25356988 |
+|  6 | 15files  | Map input records      | Order And Count Lexeme Feature                 |  25356988 |
+|  7 | 15files  | Map output records     | Order And Count Lexeme Feature                 |  25356988 |
+|  8 | 15files  | Combine input records  | Order And Count Lexeme Feature                 |         0 |
+|  9 | 15files  | Combine output records | Order And Count Lexeme Feature                 |         0 |
+| 10 | 15files  | Reduce input records   | Order And Count Lexeme Feature                 |  25356988 |
+| 11 | 15files  | Reduce output records  | Order And Count Lexeme Feature                 |  24975429 |
+| 12 | 15files  | Map input records      | Calculate Measures Of Association With Context |  24975429 |
+| 13 | 15files  | Map output records     | Calculate Measures Of Association With Context |  24975429 |
+| 14 | 15files  | Combine input records  | Calculate Measures Of Association With Context |         0 |
+| 15 | 15files  | Combine output records | Calculate Measures Of Association With Context |         0 |
+| 16 | 15files  | Reduce input records   | Calculate Measures Of Association With Context |  24975429 |
+| 17 | 15files  | Reduce output records  | Calculate Measures Of Association With Context |  23329713 |
+| 18 | 15files  | Map input records      | Calculate Measures Of Vector Similarity        |  23329713 |
+| 19 | 15files  | Map output records     | Calculate Measures Of Vector Similarity        |  53894368 |
+| 20 | 15files  | Combine input records  | Calculate Measures Of Vector Similarity        |         0 |
+| 21 | 15files  | Combine output records | Calculate Measures Of Vector Similarity        |         0 |
+| 22 | 15files  | Reduce input records   | Calculate Measures Of Vector Similarity        |  53894368 |
+| 23 | 15files  | Reduce output records  | Calculate Measures Of Vector Similarity        |     13254 |
 
 #### Bytes Records Statistics:
-![14-File Bytes Records Statistics](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/statistics/14files-bytes.png)
+![15-File Bytes Records Statistics](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/statistics/15files-bytes.png)
 
 |    | Status   | Statistic            | Stage                                          |       Value |
 |----|----------|----------------------|------------------------------------------------|-------------|
-|  0 | 14files  | Map output bytes     | Parse Syntactic Dependencies                   | 15301600686 |
-|  1 | 14files  | Reduce shuffle bytes | Parse Syntactic Dependencies                   |   856642242 |
-|  2 | 14files  | Bytes Read           | Parse Syntactic Dependencies                   |           0 |
-|  3 | 14files  | Bytes Written        | Parse Syntactic Dependencies                   |   183754451 |
-|  4 | 14files  | Map output bytes     | Order And Count Lexeme Feature                 |  1097072386 |
-|  5 | 14files  | Reduce shuffle bytes | Order And Count Lexeme Feature                 |   336855026 |
-|  6 | 14files  | Bytes Read           | Order And Count Lexeme Feature                 |   183754451 |
-|  7 | 14files  | Bytes Written        | Order And Count Lexeme Feature                 |   193350284 |
-|  8 | 14files  | Map output bytes     | Calculate Measures Of Association With Context |  1241206109 |
-|  9 | 14files  | Reduce shuffle bytes | Calculate Measures Of Association With Context |   422812654 |
-| 10 | 14files  | Bytes Read           | Calculate Measures Of Association With Context |   193350284 |
-| 11 | 14files  | Bytes Written        | Calculate Measures Of Association With Context |   782690392 |
-| 12 | 14files  | Map output bytes     | Calculate Measures Of Vector Similarity        |  4136504326 |
-| 13 | 14files  | Reduce shuffle bytes | Calculate Measures Of Vector Similarity        |  1742580460 |
-| 14 | 14files  | Bytes Read           | Calculate Measures Of Vector Similarity        |   782690392 |
-| 15 | 14files  | Bytes Written        | Calculate Measures Of Vector Similarity        |     6584955 |
+|  0 | 15files  | Map output bytes     | Parse Syntactic Dependencies                   | 16705042311 |
+|  1 | 15files  | Reduce shuffle bytes | Parse Syntactic Dependencies                   |   935350827 |
+|  2 | 15files  | Bytes Read           | Parse Syntactic Dependencies                   |           0 |
+|  3 | 15files  | Bytes Written        | Parse Syntactic Dependencies                   |   198061142 |
+|  4 | 15files  | Map output bytes     | Order And Count Lexeme Feature                 |  1182106721 |
+|  5 | 15files  | Reduce shuffle bytes | Order And Count Lexeme Feature                 |   362904159 |
+|  6 | 15files  | Bytes Read           | Order And Count Lexeme Feature                 |   198061142 |
+|  7 | 15files  | Bytes Written        | Order And Count Lexeme Feature                 |   208546803 |
+|  8 | 15files  | Map output bytes     | Calculate Measures Of Association With Context |  1337720373 |
+|  9 | 15files  | Reduce shuffle bytes | Calculate Measures Of Association With Context |   456075368 |
+| 10 | 15files  | Bytes Read           | Calculate Measures Of Association With Context |   208546803 |
+| 11 | 15files  | Bytes Written        | Calculate Measures Of Association With Context |   843905930 |
+| 12 | 15files  | Map output bytes     | Calculate Measures Of Vector Similarity        |  4456947892 |
+| 13 | 15files  | Reduce shuffle bytes | Calculate Measures Of Vector Similarity        |  1878320913 |
+| 14 | 15files  | Bytes Read           | Calculate Measures Of Vector Similarity        |   843905930 |
+| 15 | 15files  | Bytes Written        | Calculate Measures Of Vector Similarity        |     6597948 |
 
 ## Project workflow and Map-Reduce design
 
@@ -285,6 +294,7 @@ You can also define that only the second step will run if the first step has alr
 
 ### Steps
 #### **1. Create Syntactic Measures Of Association** -
+#### Step Jobs (Total 3):
 1. **Parse Syntactic Dependencies** - 
 	This map-reduce job takes the lines from the corpus files as input with the following shape:<br/>
 	```head_word<TAB>syntactic-ngram<TAB>total_count<TAB>counts_by_year```<br/>
@@ -298,7 +308,7 @@ You can also define that only the second step will run if the first step has alr
 	```[a-z-]+```
 	- **Stop words removal** - The english stop words are filtered and not taken into account as lexemes/features.
 	The ignored stop words can be found in: [Stop Words Identifier](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/src/main/java/utils/StopWordsIdentifier.java)
-	- **Porter-Stemmer** - Stemming is the process of reducing inflected (or sometimes derived) words to their word stem, base or root form generally a written word form. We use the Open-NLP Java libraries Porter-Stemmer in order to convert all lexemes/features into their stemmed form (e.g. ```advantage -> advantag```)
+	- **Porter-Stemmer** - Stemming is the process of reducing inflected (or sometimes derived) words to their word stem, base or root form generally a written word form. We use the Open-NLP Java libraries Porter-Stemmer in order to convert all lexemes/features into their stemmed form (e.g. ```advantage -> advantag, communicating -> commun, communication -> commun```)
 	
 	***Mapper***<br/>
 	Input-Output shape:
@@ -454,6 +464,7 @@ You can also define that only the second step will run if the first step has alr
 	***NOTE:*** We do not create 4 seperate vectors in this job but we create the measurments assocation values for the same positions in all of the 4 vectors so that each value in the output indicated the same index in all of the 4 vectors and the relevant values in this index of the vector.
 	
 #### **2. Create Golden Standard Similarity Vectors** -
+#### Step Jobs (Total 1):
 1. **Calculate Measures Of Vector Similarity** -
 	This map-reduce job maps the measures of association co-occurrence vector values for each pair of words in the golden standard to an interleaved co-occurrence vectors for the pair of words and the reducer then calculates the 24 similarity vector measure values by iterating the interleaved vectors.<br/>
 	**NOTE:**   
@@ -503,8 +514,118 @@ You can also define that only the second step will run if the first step has alr
 	1. <alligator,crocodile>	[44606.0, 3703.660081594962, 0.42162927787038723, 0.07379568106312293, 0.13744827319487954, 27658.996564902867, 1.7285574188242916, 0.13773672867460315, 0.42162927787038734, 0.15252876095224707, 0.26468538767956523, 1.0377248242623596, 5815.402758593203, 253.2698158672323, 0.20689536224570676, 0.09511245893155527, 0.1737035464364117, 3961.7051470371716, 4.155266637310252, 0.38677456515249947, 0.1200093534609998, 0.06646645654403041, 0.1246480020748524, 2.701911515411438]	false
 	```
 
+## Classification Results
+Comparing the results from both of the expirementes performed (1 corpus file vs. 15 corpus files):  
+
+### Using 1 file from the Google English Syntactic Biarcs corpus:
+```
+WEKA Random Forest Classifier Results
+===============================================
+
+Correctly Classified Instances       12135               92.0993 %
+Incorrectly Classified Instances      1041                7.9007 %
+Kappa statistic                          0.378 
+K&B Relative Info Score                 -4.1463 %
+K&B Information Score                 -257.5857 bits     -0.0195 bits/instance
+Class complexity | order 0            6212.39   bits      0.4715 bits/instance
+Class complexity | scheme            16347.7746 bits      1.2407 bits/instance
+Complexity improvement     (Sf)     -10135.3847 bits     -0.7692 bits/instance
+Mean absolute error                      0.1404
+Root mean squared error                  0.2634
+Relative absolute error                 77.4575 %
+Root relative squared error             87.4819 %
+Total Number of Instances            13176     
+
+F1 Measure: 0.40885860306643945
+Precision: 0.8314087759815243
+Recall: 0.2710843373493976
+
+True-Positive rate: 0.2710843373493976
+False-Positive rate: 0.006161377447670493
+True-Negative rate: 0.9938386225523295
+False-Negative rate: 0.7289156626506024
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.994    0.729    0.924      0.994    0.958      0.447    0.779     0.960     FALSE
+                 0.271    0.006    0.831      0.271    0.409      0.447    0.780     0.480     TRUE
+Weighted Avg.    0.921    0.656    0.915      0.921    0.902      0.447    0.780     0.912     
+
+=== Confusion Matrix ===
+
+     a     b   <-- classified as
+ 11775    73 |     a = FALSE
+   968   360 |     b = TRUE
+
+===============================================
+```
+
+### Using 15 files from the Google English Syntactic Biarcs corpus:
+```
+WEKA Random Forest Classifier Results
+===============================================
+
+Correctly Classified Instances       12382               93.4209 %
+Incorrectly Classified Instances       872                6.5791 %
+Kappa statistic                          0.5096
+K&B Relative Info Score                 16.8793 %
+K&B Information Score                 1054.8897 bits      0.0796 bits/instance
+Class complexity | order 0            6249.6044 bits      0.4715 bits/instance
+Class complexity | scheme            11377.9096 bits      0.8585 bits/instance
+Complexity improvement     (Sf)      -5128.3051 bits     -0.3869 bits/instance
+Mean absolute error                      0.1186
+Root mean squared error                  0.231 
+Relative absolute error                 65.3878 %
+Root relative squared error             76.7352 %
+Total Number of Instances            13254     
+
+F1 Measure: 0.5386243386243387
+Precision: 0.9187725631768953
+Recall: 0.3809880239520958
+
+True-Positive rate: 0.3809880239520958
+False-Positive rate: 0.003775801308944454
+True-Negative rate: 0.9962241986910555
+False-Negative rate: 0.6190119760479041
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.996    0.619    0.935      0.996    0.965      0.567    0.903     0.985     FALSE
+                 0.381    0.004    0.919      0.381    0.539      0.567    0.903     0.685     TRUE
+Weighted Avg.    0.934    0.557    0.933      0.934    0.922      0.567    0.903     0.954     
+
+=== Confusion Matrix ===
+
+     a     b   <-- classified as
+ 11873    45 |     a = FALSE
+   827   509 |     b = TRUE
+
+===============================================
+```
+
+### Conclusions:
+We can see that using more corpus files managed to improve the Correctly Classified Instances from 92.0993 % to 93.4209 % when using 15 corpus files instead of the 1 file used in the first expirement (and to also decrease the Incorrectly Classified Instances from 7.9007 % to 6.5791 %).  
+We can conclude that using more information produced a more accurate and distinguishable similarity vectors that the classifier classified more accurately.  
+We can also see that the precision, recall and F1 measure improved between the two expirements.  <br/>
+When running on 1 corpus file we got:
+```
+F1 Measure: 0.40885860306643945
+Precision: 0.8314087759815243
+Recall: 0.2710843373493976
+```
+While when running on 15 corpus files we got:
+```
+F1 Measure: 0.5386243386243387
+Precision: 0.9187725631768953
+Recall: 0.3809880239520958
+```
+
 ## Examples And Resources
 - After compiling the project - project JAR files can be found in the projects target directory.
-- Example for the ```inputs.txt``` text file needed to run the project can be found in the directory of the project.
+- Example for the ```inputs.txt``` text file format needed to run the project can be found in the projects GitHub resources directory.
+- Example for the Golden Standard word pair classification text file can be fount under the name ```word-relatedness.txt``` in the projects GitHub resources directory.
+
 
 

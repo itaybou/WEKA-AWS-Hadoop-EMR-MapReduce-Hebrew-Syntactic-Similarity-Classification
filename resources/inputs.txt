@@ -1,0 +1,9 @@
+<input-bucket> <input-jar-file-name> <input-golden-standard> <upload-jar-and-golden-standard (true/false)>
+<corpus-input-path>
+<output-bucket>
+<corpus-files-count (0 < x < 100)>
+<worker-instance-count (0 < x < 10)>
+<calculate-measures (true/false)> <optional-measures-path>
+<output-co-occurrence-vectors (true/false)>
+<run-classifier (true/false)> <classifier-output-path> <optional-classifier-input-path>
+<delete-after-finished (true/false)>
