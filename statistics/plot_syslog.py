@@ -68,8 +68,8 @@ def plot_bytes_statistics(value):
 
 print(f'Total lexemes read from corpus: {lexeme_counter_value}')
 print(f'Total features read from corpus: {feature_counter_value}')
-plot_in_out_statistics(value='2files')
-plot_in_out_statistics(value='14files')
+plot_in_out_statistics(value='1file')
+#plot_in_out_statistics(value='14files')
 
-plot_bytes_statistics(value='2files')
-plot_bytes_statistics(value='14files')
+plot_bytes_statistics(value='1file')
+#plot_bytes_statistics(value='14files')

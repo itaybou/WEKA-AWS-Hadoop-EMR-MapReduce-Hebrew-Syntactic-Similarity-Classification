@@ -29,7 +29,7 @@ public class Classifier {
             DataSource source = new DataSource(arffInputPath);
             Instances classifierData = source.getDataSet();
             if(classifierData.numInstances() < K_FOLDS) {
-                k = classifierData.numInstances();
+                k = classifierData.numInstances(); // Verify that the training data is greater then the K value for the k-fold cross-validation
             }
 
             System.out.println("\nClassifier Input Data Structure:\n===============================\n" + source.getStructure());

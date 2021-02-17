@@ -303,12 +303,12 @@ public class Main {
       inBucket = inputDetails[0];
       inputJarName = inputDetails[1];
       inputGoldStandardFile = inputDetails[2];
-      if(!(new File(inputGoldStandardFile).isFile())) {
+      uploadJARAndGolden = Boolean.parseBoolean(inputDetails[3]);
+      if(!(new File(inputGoldStandardFile).isFile()) && uploadJARAndGolden) {
         System.err.println(
                 "Invalid golden standard word pair file.");
         return false;
       }
-      uploadJARAndGolden = Boolean.parseBoolean(inputDetails[3]);
       corpusPath = reader.readLine();
       outBucket = reader.readLine();
       corpusFileCount = Integer.parseInt(reader.readLine());
@@ -342,11 +342,11 @@ public class Main {
       System.err.println(
           "\nIllegal user file format.\n" +
                   "Expected the following input file format:\n\n" +
-                  "<input-bucket> <input-jar-file-name> <input-golden-standard> <upload-jar-and-golden-standard>\n" +
+                  "<input-bucket> <input-jar-file-name> <input-golden-standard> <upload-jar-and-golden-standard (true/false)>\n" +
                   "<corpus-input-path>\n" +
                   "<output-bucket>\n" +
-                  "<corpus-files-count>\n" +
-                  "<worker-instance-count>\n" +
+                  "<corpus-files-count (0 < x < 100)>\n" +
+                  "<worker-instance-count (0 < x < 10)>\n" +
                   "<calculate-measures (if false supply measures-path)> <measures-path>\n" +
                   "<output-co-occurrence-vectors>\n" +
                   "<run-classifier> <classifier-output-path> <optional-classifier-input-path>\n" +

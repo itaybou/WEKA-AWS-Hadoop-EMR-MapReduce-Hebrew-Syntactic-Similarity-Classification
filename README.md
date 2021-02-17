@@ -88,13 +88,19 @@ The output vector for each lexeme will have the following shape:
 
 #### Stage 3 - Similarity Vectors Classification (Similar or Not-Similar)
 In this stage we use Random Forest classifier in order te perform a supervised learning task on our pre-labeled word pairs from the golden standard.  
-The input for our RF classifier is the similarity vectors for the word pairs from the golden standard produced in the previous stage and the output is the **True-Positive, False-Positive, True-Negative and True-Positive rates**.
-We use **10-fold cross validation** method in order to evaluate our model performance (which trains 10 iterations of the model by using a different portion of the training data as testing data in each iteration).
-![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
-We also output the **Precision, Recall and F1 measurments** where:
-![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
-![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
-![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
+The input for our RF classifier is the similarity vectors for the word pairs from the golden standard produced in the previous stage with the labels given in the golden standard.  
+The output is the **True-Positive, False-Positive, True-Negative and True-Positive rates**.
+We use **10-fold cross validation** method in order to evaluate our model performance (which trains 10 iterations of the model by using a different portion of the training data as testing data in each iteration).  
+![K-Fold](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/resources/kfold.png)  
+We also output the **Precision, Recall and F1 measurments** where:  
+![Precision](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/resources/precision.png)
+![Recall](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/resources/recall.png)
+![F1](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/resources/f1.png)
+
+F-score or F-measure is a measure of a test's accuracy.  
+It is calculated from the precision and recall of the test, where the precision is the number of correctly identified positive results divided by the number of all positive results, including those not identified correctly, and the recall is the number of correctly identified positive results divided by the number of all samples that should have been identified as positive. 
+Precision is also known as positive predictive value, and recall is also known as sensitivity in diagnostic binary classification.  
+**The F1 score is the harmonic mean of the precision and recall**.
 
 ### Additonal information
 EC2 instances used:
@@ -113,110 +119,111 @@ write in your cmd - "aws config".
 
 1. Inside the project directory compile the project using the command : ```mvn package```.
 
-2. Create in the project target directory file named "inputs.txt".
+2. Create in the project target directory file named ```inputs.txt```.
 
 3. Create input bucket and output bucket (you can use the same bucket and create only one bucket) in AWS S3.
 
-4. 
-
-5. Fill 
+4. Fill the ```inputs.txt``` file according to the following format:
 ```
-<input-bucket> <input-jar-file-name> <input-golden-standard> <upload-jar-and-golden-standard>
+<input-bucket> <input-jar-file-name> <input-golden-standard> <upload-jar-and-golden-standard (true/false)>
 <corpus-input-path>
 <output-bucket>
-<corpus-files-count>
-<worker-instance-count>
-<calculate-measures> <measures-path>
-<output-co-occurrence-vectors>
-<run-classifier> <classifier-output-path> <optional-classifier-input-path>
-<delete-after-finished>
+<corpus-files-count (0 < x < 100)>
+<worker-instance-count (0 < x < 10)>
+<calculate-measures (true/false)> <optional-measures-path>
+<output-co-occurrence-vectors (true/false)>
+<run-classifier (true/false)> <classifier-output-path> <optional-classifier-input-path>
+<delete-after-finished (true/false)>
 ```
-- ```<input-bucket>``` - Is the bucket the jar file ```<input-jar-file-name>``` is located in.  
-- ```<output-bucket>``` - Is the bucket the job will store outputs in **(Will be deleted after the job is completed!)**, Can be the same as input bucket.  
+- ```<input-bucket>``` - the bucket that contains the Map-Reduce JAR file and the Golden-Standard file, ```<input-jar-file-name>``` the name of the Map-Reduce JAR file, ```<input-golden-standard>``` the name of the golden standard file, ```<upload-jar-and-golden-standard>``` true/false - wether to upload the JAR file and the golden standard file to the supplied input bucket.
+- ```<corpus-input-path>``` - The input S3 bucket where the corpus files are located.
+- ```<output-bucket>``` - Is the bucket the job will store outputs in, Can be the same as input bucket.
+- ```<corpus-files-count (0 < x < 100)>``` -  The amount of files from the Google English Syntactic Biarcs corpus that will be used as input to the Map-Reduce jobs.
 - ```<worker-instance-count (0 < x < 10)>``` - The EC2 instance count that will be used for the map-reduce job (value between 0 excluding and 9 including)  
-- ```<use-local-aggregation (true or false)>``` - Wether the job will use Combiners for local aggregation in order to lower network overhead.  
-- ```<single-file (true or false)>``` - Whether to output single sorted output file (slower) or multiple sorted output files (faster).  
+- ```<calculate-measures (true/false)>``` - Wether the measures of association calculation is needed, if false you will need to supply the ```<optional-measures-path>``` S3 bucket path in which the measures of association output from a previous run are located.
+- ```<output-co-occurrence-vectors (true/false)>``` - Wether to output the co-occurrence vectors produced after the measures of association job. (**Used for testing purposed only and may create an overhead**).
+- ```<run-classifier (true/false)>``` - Whether to run the WEKA classifier in the end of the Map-Reduce Job, ```<classifier-output-path>``` is the output directory for the classification summary file, ```<optional-classifier-input-path>``` a local input path for the similarity vectors **If provided the Map-Reduce Job will not run and only the classifier will run, ignore this parameter to run the whole process**.
+- ```<delete-after-finished (true/false)>``` - Wether to delete the output bucket after the process ends.
 
-5. Make sure your input text file located in the project target directory or in the same directory as the WordPedictionRunner jar file.
+5. Make sure your input text file located in the project target directory or in the same directory as the WordPairSimilarityRunner JAR file.
 
 6. The application should be run as follows:  
-	```java -jar WordPedictionRunner.jar ```  
+```java -jar WordPairSimilarityRunner.jar ```  
 
 ***IMPORTANT NOTES:***
- - The application automatically uploads the input jar provided in the ```inputs.txt``` file to the input bucket provided in the ```inputs.txt``` file.
- - When the job is finished the output result and log-files will be automatically downloaded to the directory the ```java -jar WordPedictionRunner.jar ``` was ran from.
- - The output bucket provided in the ```inputs.txt``` file will be automatically deleted.
+ - If the ```<upload-jar-and-golden-standard (true/false)>``` is set to true, The application automatically uploads the input JAR and the golden standard file provided in the ```inputs.txt``` file to the input bucket provided in the ```inputs.txt``` file.
+ - When the job is finished the output result and log-files will be automatically downloaded to the directory the ```java -jar WordPairSimilarityRunner.jar ``` was ran from.
 
 ## Communication And Statistics:
 
 Using the python script in the statistics directory the following statstics charts were produced from the output log-files:
 
-### Using 2 Files from the Google English Syntactic Biarcs corpus
-Total lexemes read from corpus: 704071870 (```count(L)```)  
-Total features read from corpus: 802056549 (```count(F)```)
+### Using 1 File from the Google English Syntactic Biarcs corpus
+Total lexemes read from corpus: 217575117 (```count(L)```)  
+Total features read from corpus: 227636582 (```count(F)```)
 
-Total number of word-pairs in the golden standard: 13254
+Total number of word-pairs classified in the golden standard: 13254
 
 #### Input Output Records Statistics:
-![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
+![2-File Input Output Records Statistics](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/statistics/1files-input-output.png)
 
 |    | Status   | Statistic              | Stage                                          |    Value |
 |----|----------|------------------------|------------------------------------------------|----------|
-|  0 | 2files   | Map input records      | Parse Syntactic Dependencies                   | 33382028 |
-|  1 | 2files   | Map output records     | Parse Syntactic Dependencies                   | 73804771 |
-|  2 | 2files   | Combine input records  | Parse Syntactic Dependencies                   | 73804771 |
-|  3 | 2files   | Combine output records | Parse Syntactic Dependencies                   |  7594149 |
-|  4 | 2files   | Reduce input records   | Parse Syntactic Dependencies                   |  7594149 |
-|  5 | 2files   | Reduce output records  | Parse Syntactic Dependencies                   |  4237086 |
-|  6 | 2files   | Map input records      | Order And Count Lexeme Feature                 |  4237086 |
-|  7 | 2files   | Map output records     | Order And Count Lexeme Feature                 |  4237086 |
-|  8 | 2files   | Combine input records  | Order And Count Lexeme Feature                 |        0 |
-|  9 | 2files   | Combine output records | Order And Count Lexeme Feature                 |        0 |
-| 10 | 2files   | Reduce input records   | Order And Count Lexeme Feature                 |  4237086 |
-| 11 | 2files   | Reduce output records  | Order And Count Lexeme Feature                 |  4140401 |
-| 12 | 2files   | Map input records      | Calculate Measures Of Association With Context |  4140401 |
-| 13 | 2files   | Map output andrecords     | Calculate Measures Of Association With Context |  4140401 |
-| 14 | 2files   | Combine input records  | Calculate Measures Of Association With Context |        0 |
-| 15 | 2files   | Combine output records | Calculate Measures Of Association With Context |        0 |
-| 16 | 2files   | Reduce input records   | Calculate Measures Of Association With Context |  4140401 |
-| 17 | 2files   | Reduce output records  | Calculate Measures Of Association With Context |  3732246 |
-| 18 | 2files   | Map input records      | Calculate Measures Of Vector Similarity        |  3732246 |
-| 19 | 2files   | Map output records     | Calculate Measures Of Vector Similarity        |  7604638 |
-| 20 | 2files   | Combine input records  | Calculate Measures Of Vector Similarity        |        0 |
-| 21 | 2files   | Combine output records | Calculate Measures Of Vector Similarity        |        0 |
-| 22 | 2files   | Reduce input records   | Calculate Measures Of Vector Similarity        |  7604638 |
-| 23 | 2files   | Reduce output records  | Calculate Measures Of Vector Similarity        |    13245 |
+|  0 | 1file    | Map input records      | Parse Syntactic Dependencies                   | 16145663 |
+|  1 | 1file    | Map output records     | Parse Syntactic Dependencies                   | 18773923 |
+|  2 | 1file    | Combine input records  | Parse Syntactic Dependencies                   | 18773923 |
+|  3 | 1file    | Combine output records | Parse Syntactic Dependencies                   |  2897948 |
+|  4 | 1file    | Reduce input records   | Parse Syntactic Dependencies                   |  2897948 |
+|  5 | 1file    | Reduce output records  | Parse Syntactic Dependencies                   |  1977150 |
+|  6 | 1file    | Map input records      | Order And Count Lexeme Feature                 |  1977150 |
+|  7 | 1file    | Map output records     | Order And Count Lexeme Feature                 |  1977150 |
+|  8 | 1file    | Combine input records  | Order And Count Lexeme Feature                 |        0 |
+|  9 | 1file    | Combine output records | Order And Count Lexeme Feature                 |        0 |
+| 10 | 1file    | Reduce input records   | Order And Count Lexeme Feature                 |  1977150 |
+| 11 | 1file    | Reduce output records  | Order And Count Lexeme Feature                 |  1911836 |
+| 12 | 1file    | Map input records      | Calculate Measures Of Association With Context |  1911836 |
+| 13 | 1file    | Map output records     | Calculate Measures Of Association With Context |  1911836 |
+| 14 | 1file    | Combine input records  | Calculate Measures Of Association With Context |        0 |
+| 15 | 1file    | Combine output records | Calculate Measures Of Association With Context |        0 |
+| 16 | 1file    | Reduce input records   | Calculate Measures Of Association With Context |  1911836 |
+| 17 | 1file    | Reduce output records  | Calculate Measures Of Association With Context |  1679479 |
+| 18 | 1file    | Map input records      | Calculate Measures Of Vector Similarity        |  1679479 |
+| 19 | 1file    | Map output records     | Calculate Measures Of Vector Similarity        |  3674486 |
+| 20 | 1file    | Combine input records  | Calculate Measures Of Vector Similarity        |        0 |
+| 21 | 1file    | Combine output records | Calculate Measures Of Vector Similarity        |        0 |
+| 22 | 1file    | Reduce input records   | Calculate Measures Of Vector Similarity        |  3674486 |
+| 23 | 1file    | Reduce output records  | Calculate Measures Of Vector Similarity        |    13176 |
 
 #### Bytes Records Statistics:
-![No Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_No_Combiner.png)
-
-|    | Status   | Statistic            | Stage                                          |      Value |
-|----|----------|----------------------|------------------------------------------------|------------|
-|  0 | 2files   | Map output bytes     | Parse Syntactic Dependencies                   | 1558130249 |
-|  1 | 2files   | Reduce shuffle bytes | Parse Syntactic Dependencies                   |   91646025 |
-|  2 | 2files   | Bytes Read           | Parse Syntactic Dependencies                   |          0 |
-|  3 | 2files   | Bytes Written        | Parse Syntactic Dependencies                   |   33253030 |
-|  4 | 2files   | Map output bytes     | Order And Count Lexeme Feature                 |  193711966 |
-|  5 | 2files   | Reduce shuffle bytes | Order And Count Lexeme Feature                 |   62976319 |
-|  6 | 2files   | Bytes Read           | Order And Count Lexeme Feature                 |   33253030 |
-|  7 | 2files   | Bytes Written        | Order And Count Lexeme Feature                 |   34643634 |
-|  8 | 2files   | Map output bytes     | Calculate Measures Of Association With Context |  215170779 |
-|  9 | 2files   | Reduce shuffle bytes | Calculate Measures Of Association With Context |   74235914 |
-| 10 | 2files   | Bytes Read           | Calculate Measures Of Association With Context |   34643634 |
-| 11 | 2files   | Bytes Written        | Calculate Measures Of Association With Context |  133121186 |
-| 12 | 2files   | Map output bytes     | Calculate Measures Of Vector Similarity        |  636086316 |
-| 13 | 2files   | Reduce shuffle bytes | Calculate Measures Of Vector Similarity        |  255931083 |
-| 14 | 2files   | Bytes Read           | Calculate Measures Of Vector Similarity        |  133121186 |
-| 15 | 2files   | Bytes Written        | Calculate Measures Of Vector Similarity        |    5762026 |
+![2-File Byte Records Statistics](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/statistics/1files-bytes.png)
+if (lexemePairs != null) {
+|    | Status   | Statistic            | Stage                                          |     Value |
+|----|----------|----------------------|------------------------------------------------|-----------|
+|  0 | 1file    | Map output bytes     | Parse Syntactic Dependencies                   | 383448044 |
+|  1 | 1file    | Reduce shuffle bytes | Parse Syntactic Dependencies                   |  35170027 |
+|  2 | 1file    | Bytes Read           | Parse Syntactic Dependencies                   |         0 |
+|  3 | 1file    | Bytes Written        | Parse Syntactic Dependencies                   |  15438641 |
+|  4 | 1file    | Map output bytes     | Order And Count Lexeme Feature                 |  88020061 |
+|  5 | 1file    | Reduce shuffle bytes | Order And Count Lexeme Feature                 |  29985418 |
+|  6 | 1file    | Bytes Read           | Order And Count Lexeme Feature                 |  15438641 |
+|  7 | 1file    | Bytes Written        | Order And Count Lexeme Feature                 |  15946004 |
+|  8 | 1file    | Map output bytes     | Calculate Measures Of Association With Context |  96240730 |
+|  9 | 1file    | Reduce shuffle bytes | Calculate Measures Of Association With Context |  33974759 |
+| 10 | 1file    | Bytes Read           | Calculate Measures Of Association With Context |  15946004 |
+| 11 | 1file    | Bytes Written        | Calculate Measures Of Association With Context |  59530793 |
+| 12 | 1file    | Map output bytes     | Calculate Measures Of Vector Similarity        | 301839728 |
+| 13 | 1file    | Reduce shuffle bytes | Calculate Measures Of Vector Similarity        | 120360975 |
+| 14 | 1file    | Bytes Read           | Calculate Measures Of Vector Similarity        |  59530793 |
+| 15 | 1file    | Bytes Written        | Calculate Measures Of Vector Similarity        |   5268428 |
 
 ### Using 14 Files from the Google English Syntactic Biarcs corpus
 Total lexemes read from corpus: 8004073453 (```count(L)```)  
 Total features read from corpus: 9420023809 (```count(F)```)
 
-Total number of word-pairs in the golden standard: 13254
+Total number of word-pairs classified in the golden standard: 13254
 
 #### Input Output Records Statistics:
-![Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_Combiner.png)
+![14-File Input Output Records Statistics](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/statistics/14files-input-output.png)
 
 |    | Status   | Statistic              | Stage                                          |     Value |
 |----|----------|------------------------|------------------------------------------------|-----------|
@@ -246,7 +253,7 @@ Total number of word-pairs in the golden standard: 13254
 | 23 | 14files  | Reduce output records  | Calculate Measures Of Vector Similarity        |     13254 |
 
 #### Bytes Records Statistics:
-![No Combiner Input Output Records](https://github.com/itaybou/AWS-Hadoop-EMR-MapReduce-Hebrew-3gram-deleted-estimation/blob/main/statistics/In_Out_No_Combiner.png)
+![14-File Bytes Records Statistics](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/statistics/14files-bytes.png)
 
 |    | Status   | Statistic            | Stage                                          |       Value |
 |----|----------|----------------------|------------------------------------------------|-------------|
@@ -267,165 +274,237 @@ Total number of word-pairs in the golden standard: 13254
 | 14 | 14files  | Bytes Read           | Calculate Measures Of Vector Similarity        |   782690392 |
 | 15 | 14files  | Bytes Written        | Calculate Measures Of Vector Similarity        |     6584955 |
 
-
-## Word Analysis
-
-| 2gram        | על קבר                                                                                                     | אהב את                                                                                                                                                                                                                                                   | אולי לא                                    | כבר במאה                                                                          | מה שהאדם            |
-|--------------|------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------|-----------------------------------------------------------------------------------|---------------------|
-| 1 Prediction | על קבר רחל                                                                                                 | אהב את יוסף                                                                                                                                                                                                                                              | אולי לא היה                                | כבר במאה השלישית                                                                  | מה שהאדם עושה       |
-| 2 Prediction | על קבר אביו                                                                                                | אהב את המלאכה                                                                                                                                                                                                                                            | אולי לא היתה                               | כבר במאה העשירית                                                                  | מה שהאדם הוא        |
-| 3 Prediction | על קבר שמואל                                                                                               | אהב את זה                                                                                                                                                                                                                                                | אולי לא היו                                | כבר במאה התשע                                                                     | מה שהאדם צריך       |
-| 4 Prediction | על קבר הצדיק                                                                                               | אהב את עשו                                                                                                                                                                                                                                               | אולי לא פחות                               | כבר במאה הרביעית                                                                  | מה שהאדם יכול       |
-| 5 Prediction | על קבר האחים                                                                                               | אהב את אשתו                                                                                                                                                                                                                                              | אולי לא הייתי                              | כבר במאה התשיעית                                                                  | מה שהאדם משיג       |
-|              |                                                                                                            |                                                                                                                                                                                                                                                          |                                            |                                                                                   |                     |
-| Decision     | We can see that the decision that was made here is correct since the first prediction is a common sentence | We can see that the prediction made here is not as we would expect. we would expect the most common prediction for someone to love his wife and not joseph. The possible reason is that old phrases are weighted the same as newer more updated phrases. | Here the prediction is as we would expect. | Here we would expect a more recent century to appear in in the top 5 predictions. | As we would expect. |
-
-| 2gram        | בדיוק באותה                                    | תשובות על                                                                      | תלויה על                                              | על חלק                                                                     | ולא תוסיף                                                                                                                                           |
-|--------------|------------------------------------------------|--------------------------------------------------------------------------------|-------------------------------------------------------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1 Prediction | בדיוק באותה מידה                               | תשובות על שאלות                                                                | תלויה על בלימה                                        | על חלק מן                                                                  | ולא תוסיף קום                                                                                                                                       |
-| 2 Prediction | בדיוק באותה צורה                               | תשובות על השאלות                                                               | תלויה על הקיר                                         | על חלק גדול                                                                | ולא תוסיף לנפול                                                                                                                                     |
-| 3 Prediction | בדיוק באותה שעה                                | תשובות על כל                                                                   | תלויה על קיר                                          | על חלק ניכר                                                                | ולא תוסיף עוד                                                                                                                                       |
-| 4 Prediction | בדיוק באותה דרך                                | תשובות על בני                                                                  | תלויה על חוט                                          | על חלק זה                                                                  | ולא תוסיף לדאבה                                                                                                                                     |
-| 5 Prediction | בדיוק באותה תקופה                              | תשובות על שאלותיו                                                              | תלויה על צווארו                                       | על חלק של                                                                  | ולא תוסיף עצב                                                                                                                                       |
-|              |                                                |                                                                                |                                                       |                                                                            |                                                                                                                                                     |
-| Decision     | A very good prediction was given in this case. | As we expect all  top 5 prediction are about answers to some form of questions | The first prediction is a very common  hebrew phrase. | Not as we expected we would expect the 4th prediction to be the first one. | We would expect the 3rd prediction to be the first and the 4th prediction to be switched with the fifth one since the fifth is more common nowdays. |
-
-
 ## Project workflow and Map-Reduce design
 
-We have only one step that include 5 map-reduce jobs, the following jobs are :
+**The Map-Reduce design of the project includes 2 steps:**
+1. **Create Syntactic Measures Of Association (Includes 3 Map-Reduce Jobs)** - Creates the association measurments 4 co-occurrence vectors individual values for each lexeme and associated feature.<br/>Will be used as input for the following steps which groups those association measurments co-occurrence vector values into an interleaved iterable that contains the vector values for the 2 compared words.
+2. **Create Golden Standard Similarity Vectors (Includes 1 Map-Reduce Job)** - Calculates and creates the 24 values similarity vector for the word pairs taken from the golden standard.
 
-1. **Split corpus** - 
-	This map-reduce job firstly filters all the three grams in the corpus by the following regular expression:
-	```
-	^(?:[א-ת]+[א-ת\\d+ ]+|[א-ת\\d+ ]+[א-ת]+|[א-ת\\d+ ]+[א-ת]+[א-ת\\d+ ]+)$"
-	```
-	with this filter we will map only three grams that start with hebrew characters and numbers.
-	The map function will split the corpus logically and not physically by the even and odd line id's, for example, if the input of the map is:
-	```
-	1.How are you	1975	400 (400 is the occurences of the three gram in 1975)
-	2.How are you	2020	300 (300 is the occurences of the three gram in 2020)
-	3.How are you	1985	100 (100 is the occurences of the three gram in 1985)
-	...
-	```
-	The output of the map function will be :
-	```
-	How are you	1	400,100 (1 indicating that this three gram is in the second part of the corpus)
-	How are you	0	300 (1 indicating that this three gram is in the first part of the corpus)
-	...
-	```
+The first step is calculated for the entire given corpus input files (defined in the ```inputs.txt``` file).   
+You can also define that only the second step will run if the first step has already beeen claculated (also defined in the ```inputs.txt``` file).
 
-	After mapping each three gram to the occurences in each part of the corpus, the reduce function will sum all the occurences in the first and the second 	part and the reducer output will be :
+### Steps
+#### **1. Create Syntactic Measures Of Association** -
+1. **Parse Syntactic Dependencies** - 
+	This map-reduce job takes the lines from the corpus files as input with the following shape:<br/>
+	```head_word<TAB>syntactic-ngram<TAB>total_count<TAB>counts_by_year```<br/>
+	where ```syntactic-ngram``` is a list of the syntactic sentence with the shape:<br/>
+	```word/pos-tag/dep-label/head-index```<br/>
+	The ```syntactic-ngram``` list is splitted and all the associated lexemes and features and their syntactic connection are emitted to the reducer with the associated ```total_count``` values.<br/>This Job also uses the reducer as a local aggregation **combiner**.<br/><br/>
+	
+	***Sentence/Words Pre-processing steps:***<br/>
+	The mapper for this jobs includes a few pre-processing steps that are used to lower the amount of key-value pairs emitted, generalize the lexeme and feature words by using a **Porter-Stemmer** and ignore irellevant data for the task.
+	- **English words** - The following regex is used to allow only english words to be taken into considiration as lexemes/features:
+	```[a-z-]+```
+	- **Stop words removal** - The english stop words are filtered and not taken into account as lexemes/features.
+	The ignored stop words can be found in: [Stop Words Identifier](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/src/main/java/utils/StopWordsIdentifier.java)
+	- **Porter-Stemmer** - Stemming is the process of reducing inflected (or sometimes derived) words to their word stem, base or root form generally a written word form. We use the Open-NLP Java libraries Porter-Stemmer in order to convert all lexemes/features into their stemmed form (e.g. ```advantage -> advantag```)
+	
+	***Mapper***<br/>
+	Input-Output shape:
 	```
-	How are you	300	500 (300 is the occurences in the first part of the corpus and 500 is the occurences in the second part)
-	...
-	```
-
-2. **Aggregate Nr Tr** - 
-	This map-reduce job aggregates the sums of 4 values in the deleted estimation formula: Nr0, Nr1, Tr01, Tr10 by using
-	the input of the splitted corpus:
-	```
-	How are you	300	500 (300 is the occurences in the first part of the corpus and 500 is the occurences in the second part)
-	How are them	300	400 (300 is the occurences in the first part of the corpus and 400 is the occurences in the second part)
-	```
-	The output of the mapping for the Nr calculation will be:
-	```
-	Nr0	300	1,1
-	Nr1	500	1
-	Nr1	400	1
-	```
-	The output of the mapping for the Tr calculation will be:
-	```
-	Tr01	300	500,400
-	Tr10	500	300
-	Tr10	400	300
-	```
-	After mapping each occurences value to corrosponding Nr/Tr values the reducer will sum the values and the output will be:
-	- For Nr:
-	```
-	Nr0	300	2
-	Nr1	500	1
-	Nr1	400	1
-	```
-	- For Tr:
-	```
-	Tr01	300	900
-	Tr10	500	300
-	Tr10	400	300
-	```
-
-3. **Join Nr Tr with 3grams** -
-	The goal of this job is to join the 3grams with their corrosponding Nr and Tr values.
-	The purpose of the job is to avoid storing a list of 3grams for each occurences value in the previous job, by doing that we remove all local memory usage 	  that is input dependant.
-	This job has two mappers and one reducer.
-	The first mapping function recieves the input from the split corpus job and outputs 4 values for each value as follows:
-	```
-	300	THREE_GRAM	How are you	Nr0 (300 is the first split occurences, THREE_GRAM enum indicator and Nr0 indicator for the first split)
-	500	THREE_GRAM	How are you	Nr1
-	300	THREE_GRAM	How are you	Tr01
-	500	THREE_GRAM	How are you	Tr10
-	...
-	```
-	The second mapping function recieves the input from the aggregate Nr Tr job and maps twice to the following outputs:
-	- For Nr:
-	```
-	300	AGGREGATED	2	Nr0 (300 is the first split occurences, AGGREGATED enum indicator and Nr0 indicator for the first split)
-	500	AGGREGATED	1	Nr1
-	400	AGGREGATED	1	Nr1
-	```
-	- For Tr:
-	```
-	300	AGGREGATED	900	Tr01 (300 is the first split occurences, AGGREGATED enum indicator and Tr01 indicator for the first split)
-	500	AGGREGATED	300	Tr10
-	400	AGGREGATED	300	Tr10
-	```
-	After mapping each occurences value the reducer will join the occurences with the corrosponding 3grams.
-	The input for the reduces will be sorted by the by the enum indicator and the occurences value and and grouped by the occurences value.
-	The output of the reducer will be:
-	```
-	How are you	Nr0	2
-	How are you	Nr1	1
-	How are them	Nr1	1
-	How are them	Nr0	2
-	How are you	Tr01	900
-	How are you	Tr10	300
-	How are them	Tr01	900
-	How are them	Tr10	400
-	```
-4. **Calculate deleted estimation: (Tr01 + Tr10) / (N * (Nr0 + Nr1))** -
-	The goal of this job is to calculate the deleted estimation value for each 3gram.
-	The mapping function return the 3grams with the operation and aggregated value (same as previous job).
-	The reducer function recieves the total Ngram value N, captures the Nr0, Nr1, Tr01, Tr10 from the mapping function and emits the calculation of the deleted estimation formula. The output will look like:
-	```
-	How are you	<probability> (Where probability is in range [0, 1])
-	How are them	<probability>
+	Input shape:
+		key: <line-id>
+	  	value: <head_word<TAB>syntactic-ngram<TAB>total_count<TAB>counts_by_year> (syntactic-ngram: [<word/pos-tag/dep-label/head-index>]),
+	Output shape:
+	  	key: <lexeme | feature | <lexeme, feature>>
+	  	value: <total_count>
 	```
 	
-5. **Sort deleted estimation output** -
-	This goal of this job is to emit the deleted estimation values calculated in the previous in a sorted fashion so that it is sorted by:
-	1. The first word of the 3gram.
-	2. If first words are equal sort by second word of the three gram.
-	3. If first 2 words from the 3 gram are equal sort by the probability value.
-	(The output will be sorted by first two words alphabetically ascending and by the probabilities descending)
+	The mapping process will also count the total amount of lexmes (```count(L)```) and the total amount of features (```count(F)```) in the corpus as Map-Reduce Counters.
 	
-	If true flag for single file output is given in the ```inputs.txt``` file (expanded on later in this readme) than the job will use one reducer to output one sorted file. Otherwise, the output will be multiple sorted files.
+	Mapper Output example:
+	```
+	1. allig	40  (alligator stemmed taken as lexeme)
+	2. beauti/nn	40  (beautiful stemmed taken as feature)
+	3. <allig,beauti/nn>	40 (the syntactic connection of alligator and beautiful)
+	4. crocodil	15  (crocodile stemmed taken as lexeme)
+	5. beauti/nn	15  (beautiful stemmed taken as feature)
+	6. strong/subj	15  (strong stemmed taken as feature)
+	7. <crocodil,beauti/nn>		15 (the syntactic connection of crocodile and beautiful)
+	8. <crocodil,strong/subj>	15 (the syntactic connection of crocodile and strong)
+	...
+	```
 	
+	***Reducer/Combiner***<br/>
+	Input-Output shape:
+	```
+	Input shape:
+		key: <lexeme | feature | <lexeme, feature>>,
+		value: value: [counts]
+	Output shape:
+		key: <lexeme | feature | <lexeme, feature>>
+		value: value: <count(L=lexeme) | count(F=feature) | count(F=feature, L=lexeme)>
+	```
 
-### Local aggregation using Combiners
-If true flag for local aggregation is given in the ```inputs.txt``` file (expanded on later in this readme) than the job will use combiner in order to optimize the redducer job where possible.  
-The following jobs include an optional Combiner:  
-**Split corpus** and **Aggregate Nr Tr**.  
-Both use the combiner to locally aggregate values (Corpus split aggregation and Nr/Tr values aggragation) before passing them to the reducer.  
-Statistics for the combiner usage difference can be found in the [Statistics](#Statistics) section.  
+	After mapping each lexeme/feature/syntactic connection, the reduce function will sum all the ```total_count``` values and the output of the reducer will be:
+	Reducer Output example:
+	```
+	1. allig	40 
+	2. beauti/nn	55 (Total beauti/nn feature appearence count)
+	3. <allig,beauti/nn>	40
+	4. crocodil	15
+	6. strong/subj	15
+	7. <crocodil,beauti/nn>		15
+	8. <crocodil,strong/subj>	15
+	...
+	```
+	
+2. **Order And Count Lexeme Feature** - 
+	This map-reduce job associates the lexemes/features/syntactic dependencies to their role and eventually outputs the **features as keys** with their corresponding counter values.<br/>
+	
+	***Mapper***<br/>
+	Input-Output shape:
+	```
+	Input shape:
+		key: <lexeme | feature | <lexeme, feature>>
+		value: value: <count(L=lexeme) | count(F=feature) | count(F=feature, L=lexeme)>
+	Output shape:
+		key: <<LEXEME, lexeme> | <FEATURE, feature> | <LEXEME_FEATURE, lexeme>>
+		value: <<'L', count(L=lexeme)> | <'F', count(F=feature)> | <'LF', <feature, count(F=feature, L=lexeme)>>>
+	```
+	
+	Mapper Output example:
+	```
+	1. LEXEME	allig		L	40 
+	2. FEATURE	beauti/nn	F	55
+	3. LEXEME_FEATURE	allig		LF	<beauti/nn,40>
+	4. LEXEME	crocodil	L	15
+	6. FEATURE	strong/subj	F	15
+	7. LEXEME_FEATURE	crocodil	LF	<beauti/nn,15>
+	8. LEXEME_FEATURE	crocodil	LF	<strong/subj,15>
+	...
+	```
+	
+	***Reducer***<br/>
+	Input-Output shape:
+	```
+	Input shape:
+		key: <<LEXEME, lexeme> | <FEATURE, feature> | <LEXEME_FEATURE, lexeme>>
+		value: <<'L', count(L=lexeme)> | <'F', count(F=feature)> | <'LF', <feature, count(L=lexeme, F=feature)>>>
+	Output shape:
+		key: <<FEATURE, feature> | <LEXEME_FEATURE, feature>>
+		value: <count(F=feature) | <lexeme, count(F=feature, L=lexeme), count(L=lexeme)>>
+	```
+	
+	The mapper output is partitioned by the secondary key values (the lexeme/feature) so that ```<LEXEME_FEATURE, lexeme>``` and ```<LEXEME, lexeme>``` will arrive to same reducer.<br/>
+	It is sorted by the lexeme/feature values and then by the LEXEME/FEATURE/LEXEME_FEATURE tags so that ```<LEXEME | FEATURE>``` tags will arrive before ```<LEXEME_FEATURE>``` tag for every equal lexeme.
+	And finally grouped by the lexeme/feature value so that the iterable will contain only values associated with the same lexeme/feature values.
+	
+	Reducer Output example:
+	``` 
+	1. FEATURE	beauti/nn	55
+	2. LEXEME_FEATURE	beauti/nn	<allig,40,40>
+	3. FEATURE	strong/subj	15
+	4. LEXEME_FEATURE	beauti/nn	<crocodil,15,15>
+	5. LEXEME_FEATURE	strong/subj	<crocodil,15,15>
+	...
+	```
+	
+3. **Calculate Measures Of Association With Context** - 
+	This map-reduce job is responsible for outputing the co-occurence vector values for every syntactic association of lexemes and features.<br/>
+	The mapper emits the tagged input values and the reducer recieves the entire information for calculating the 4 measures of association measures (```count(F=f)```, ```count(L=l)```, ```count(F=f, L=l)``` and the global counters aggregated in the first map-reduce job, ```count(L)``` and ```count(F)```).<br/>
+	The final output of this job is the lexeme value as key associated with the ***feature and the Plain Frequncy, Relative Frequncy, PMI and T-Test measures***.<br/>
+	
+	
+	***Mapper***<br/>
+	Input-Output shape:
+	```
+	Input shape:
+		key: <<FEATURE, feature> | <LEXEME_FEATURE, feature>>
+		value: <count(F=feature) | <lexeme, count(F=feature, L=lexeme), count(L=lexeme)>>
+	Output shape:
+		key: <<FEATURE, feature> | <LEXEME_FEATURE, feature>>
+		value: <<'F', count(F=feature)> | <'LF', <lexeme, count(F=feature, L=lexeme), count(L=lexeme)>>>
+	```
+	
+	Mapper Output example:
+	``` 
+	1. FEATURE	beauti/nn	F	55
+	2. LEXEME_FEATURE	beauti/nn	LF	<allig,40,40>
+	3. FEATURE	strong/subj	F	15
+	4. LEXEME_FEATURE	beauti/nn	LF	<crocodil,15,15>
+	5. LEXEME_FEATURE	strong/subj	LF	<crocodil,15,15>
+	...
+	```
+	
+	***Reducer***<br/>
+	Input-Output shape:
+	```
+	Input shape:
+		key: <<FEATURE, feature> | <LEXEME_FEATURE, feature>>
+		value: <<'F', count(F=feature)> | <'LF', <lexeme, count(F=feature, L=lexeme), count(L=lexeme)>>>
+	Output shape:
+		key: <lexeme>
+		value: <<lexeme, feature, plain-frequency, relative-frequency, pmi, t-test>>
+	```
 
-The following jobs do not include optional Combiner:
-- **Join Nr Tr with 3grams -** Join operation only, No use for combiner.
-- **Calculate deleted estimation -** Did not use Combiner in this map reduce job since we perform
-	division operation in order to calculate the deleted estimation probability
-	which is not an associative operation.
-- **Sort deleted estimation output -** Sort operation only, no use for combiner.
+	The mapper output is partitioned by the secondary key values (the feature) so that ```<LEXEME_FEATURE, feature>``` and ```<FEATURE, feature>``` will arrive to same reducer.<br/>
+	It is sorted by the feature values and then by the FEATURE/LEXEME_FEATURE tags so that ```<FEATURE>``` tags will arrive before ```<LEXEME_FEATURE>``` tag for every equal feature.
+	And finally grouped by the feature value so that the iterable will contain only values associated with the same feature value.
+	
+	Reducer Output example:
+	``` 
+	1. allig	<allig,beauti/nn,40.0,1.0,0.3479,0.208>
+	2. crocodil	<crocodil,beauti/nn,15.0,1.0,0.349,0.125>
+	3. crocodil	<crocodil,strong/subj,15.0,1.0,2.22,0.886>
+	...
+	```
+	
+	***NOTE:*** We do not create 4 seperate vectors in this job but we create the measurments assocation values for the same positions in all of the 4 vectors so that each value in the output indicated the same index in all of the 4 vectors and the relevant values in this index of the vector.
+	
+#### **2. Create Golden Standard Similarity Vectors** -
+1. **Calculate Measures Of Vector Similarity** -
+	This map-reduce job maps the measures of association co-occurrence vector values for each pair of words in the golden standard to an interleaved co-occurrence vectors for the pair of words and the reducer then calculates the 24 similarity vector measure values by iterating the interleaved vectors.<br/>
+	**NOTE:**   
+	- the co-occurrence vectors are in size of the entire feature set taken from the corpus but it is sparse so that it conatains a lot of zero values that are not taken into account while calculating similarity.
+	- The golden standard is loaded into memory (**Only memory assumption**) so that we can check if word pairs are present in it (and their pre-defined true/false classification).<br/>
+	
+	The interleaved vectors are sorted so that the compared lexemes are sorted alphabitcally and the feature values are also sorted alphabitcally so that each co-occurrence vector value is calculated with its counterpart from the other lexeme vector value.<br/>
+	If only one of the co-occurrence vectors contains a certain feature, the value of that feature is calculated as zero for the other vector.<br/>
+	
+	***Mapper***<br/>
+	Input-Output shape:
+	```
+	Input shape:
+		key: <lexeme>
+		value: <<lexeme, feature, plain-frequency, relative-frequency, pmi, t-test>>
+	Output shape:
+		key: <<lexeme1, lexeme2>, lexeme, feature> (<lexeme1, lexeme2> from golden standard)
+		value: <<lexeme, feature, plain-frequency, relative-frequency, pmi, t-test>>
+	```
+	
+	Mapper Output example (assuming the the pair <alligator,crocodile> is present in the golden standard):
+	``` 
+	1. <alligator,crocodile>	allig		beauti/nn	<allig,beauti/nn,40.0,1.0,0.3479,0.208>
+	2. <alligator,crocodile>	crocodil	beauti/nn	<crocodil,beauti/nn,15.0,1.0,0.349,0.125>
+	3. <alligator,crocodile>	crocodil	strong/subj	<crocodil,strong/subj,15.0,1.0,2.22,0.886>
+	...
+	```
+	
+	***Reducer***<br/>
+	Input-Output shape:
+	```
+	Input shape:
+		key: <<lexeme1, lexeme2>, lexeme, feature> (<lexeme1, lexeme2> from golden standard)
+		value: <<lexeme, feature, plain-frequency, relative-frequency, pmi, t-test>>
+	Output shape:
+		key: <<lexeme1, lexeme2>>
+		value: Similarity vector of size 24 between lexeme1 and lexeme2
+	```
+
+	The mapper output is partitioned by the sorted word pair text (e.g. <alligator,crocodile>, sorted to avoid multiplication) so that each pair in the comparison will end up in the same reducer.
+	It is sorted by the word pair text values and then by the feature values(to make sure the co-occurrence vectors are structured simillarly) and then by the compared lexeme (e.g. allig/crocodil, breaks ties with the alphabetically smaller lexeme to maintain order of calculation in the vectors).
+	And finally grouped by the word pair text values so that the iterable will contain only values associated with the same compared word pair.<br/>
+	**NOTE:** The calculation of the similarity measures is done by iterating the interleaved co-occurrence vectors using two pointers to determine if the evaluated features and lexemes are equal so that the appropriate calculation will be done for the specific feature (counted as zero in the other vector or not).
+	
+	Reducer Output example:
+	``` 
+	1. <alligator,crocodile>	[44606.0, 3703.660081594962, 0.42162927787038723, 0.07379568106312293, 0.13744827319487954, 27658.996564902867, 1.7285574188242916, 0.13773672867460315, 0.42162927787038734, 0.15252876095224707, 0.26468538767956523, 1.0377248242623596, 5815.402758593203, 253.2698158672323, 0.20689536224570676, 0.09511245893155527, 0.1737035464364117, 3961.7051470371716, 4.155266637310252, 0.38677456515249947, 0.1200093534609998, 0.06646645654403041, 0.1246480020748524, 2.701911515411438]	false
+	```
 
 ## Examples And Resources
 - After compiling the project - project JAR files can be found in the projects target directory.
 - Example for the ```inputs.txt``` text file needed to run the project can be found in the directory of the project.
+
 
