@@ -12,6 +12,7 @@ public class ARFFCreator {
             "% Lexeme Pairs Similarity Vectors\n\n" +
             "@relation similarity_vectors\n\n" +
             "% Plain frequency measures\n" +
+            "@attribute compared_pair\tstring\n" +
             "@attribute plain_manhattan_distance\treal\n" +
             "@attribute plain_euclidean_distance\treal\n" +
             "@attribute plain_cosine_distance\treal\n" +
@@ -66,7 +67,7 @@ public class ARFFCreator {
                             String[] lineParts = line.split("\t");
                             writer.println(String.format("%% %s", lineParts[0])); // Write comment with the word pair above the vector
                             samplesToWordPair.put(sampleId++, lineParts[0]);
-                            writeVectorLine(writer, lineParts[1], lineParts[2]);
+                            writeVectorLine(writer, lineParts[0], lineParts[1], lineParts[2]);
                         }
                     } catch (IOException e) {
                         System.err.println("Unable to read similarity vector file " + vectorFile.getName() + "\n" + e.getMessage());
@@ -82,9 +83,9 @@ public class ARFFCreator {
         return arffPath;
     }
 
-    private static void writeVectorLine(PrintWriter writer, String vector, String classification) {
+    private static void writeVectorLine(PrintWriter writer, String pair, String vector, String classification) {
         String clearedVector = vector.replaceAll("[\\[\\]\\s+]", "").replaceAll("NaN", String.valueOf(Double.MIN_VALUE));
-        writer.println(String.format("%s,%s", clearedVector, classification.toUpperCase()));
+        writer.println(String.format("%s,%s,%s", pair.replace(",", "#"), clearedVector, classification.toUpperCase()));
     }
 
     public static Map<Integer, String> getSamplesToWordPair() {

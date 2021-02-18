@@ -5,13 +5,16 @@ import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.evaluation.output.prediction.PlainText;
 import weka.classifiers.meta.AdaBoostM1;
+import weka.classifiers.meta.FilteredClassifier;
 import weka.classifiers.trees.J48;
 import weka.classifiers.trees.RandomForest;
-import weka.core.Instance;
-import weka.core.Instances;
+import weka.core.*;
 
-import weka.core.Range;
 import weka.core.converters.ConverterUtils.DataSource;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.AddID;
+import weka.filters.unsupervised.attribute.RemoveType;
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.Map;
@@ -31,6 +34,9 @@ public class Classifier {
             if(classifierData.numInstances() < K_FOLDS) {
                 k = classifierData.numInstances(); // Verify that the training data is greater then the K value for the k-fold cross-validation
             }
+            RemoveType removeType = new RemoveType();
+            removeType.setAttributeType(new SelectedTag(Attribute.STRING, RemoveType.TAGS_ATTRIBUTETYPE)); // Filter to remove the string attribute representing the instance tag (compared_pair)
+            removeType.setInputFormat(classifierData);
 
             System.out.println("\nClassifier Input Data Structure:\n===============================\n" + source.getStructure());
             System.out.println("Initializing Random Forest classifier with " + k + "-folds cross validation.");
@@ -39,9 +45,13 @@ public class Classifier {
             RandomForest randomForestClassifier = new RandomForest();
             Evaluation evaluation = new Evaluation(classifierData);
 
+            FilteredClassifier filteredClassifier = new FilteredClassifier();
+            filteredClassifier.setFilter(removeType);
+            filteredClassifier.setClassifier(randomForestClassifier);
+
             System.out.println("Training & Evaluating Random Forest classifier.");
             // Train
-            evaluation.crossValidateModel(randomForestClassifier, classifierData, k, new Random(1));
+            evaluation.crossValidateModel(filteredClassifier, classifierData, k, new Random(1));
 
             System.out.println("Training & Evaluation completed. Outputting Summary and Prediction files.");
             writeResultsToFile(classifierOutputPath, evaluation);

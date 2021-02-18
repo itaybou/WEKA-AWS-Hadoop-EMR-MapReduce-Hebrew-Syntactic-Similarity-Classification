@@ -1,36 +1,22 @@
 from pathlib import Path
-from os.path import join, splitext
+from os.path import join
 from glob import glob
 from collections import defaultdict
 from nltk.stem import PorterStemmer
+from pprint import pprint
 
 ps = PorterStemmer()
 
 folder = '15-files'
-arff_file_name = 'word_pair_similarity.arff'
 
 vector_path = join(Path().resolve().parent, folder, 'similarity_vectors/output/co-occurrence_vectors')
 input_files = glob(join(vector_path, 'part*'))
+print(vector_path)
 
-arff_path = join(Path().resolve().parent, folder, 'classifier', arff_file_name)
-classifier_instance_ids = {}
+false_positive_instances = ['barrel,revolver', 'food,stove', 'hospital,school']
+false_negative_instances = ['carnivore,lizard', 'system,television', 'aeroplane,fighter']
 
-false_positive_instances = [8794, 12232, 12973]
-false_negative_instances = [5, 6, 7]
-
-instance_counter = 1
-with open(arff_path, 'r') as arff_file:
-   lines = arff_file.readlines()
-   for line in lines:
-      if line.startswith('% <'):
-         line = line.replace("%", "").replace("<", "").replace(">", "")
-         classifier_instance_ids[line.strip()] = instance_counter
-         instance_counter += 1
-
-inv_classifier_instance_ids = {v: k for k, v in classifier_instance_ids.items()}
-
-def get_common_uncommon_features(instances):
-   word_pairs = [inv_classifier_instance_ids[i] for i in false_positive_instances]
+def get_common_uncommon_features(word_pairs):
    stemmed_word_pairs = {pair:tuple(map(lambda word: ps.stem(word), pair.split(','))) for pair in word_pairs}
 
    stemmed_words = set()
@@ -55,9 +41,19 @@ def get_common_uncommon_features(instances):
    common_features = {}
    for pair, (lexeme1, lexeme2) in stemmed_word_pairs.items():
       common = lexeme_dict[lexeme1].intersection(lexeme_dict[lexeme2])
-      un_common = lexeme_dict[lexeme1].difference(lexeme_dict[lexeme2])
+      un_common = lexeme_dict[lexeme1].symmetric_difference(lexeme_dict[lexeme2])
       common_features[pair] = (common, len(common), len(un_common))
 
    return common_features
 
-print(get_common_uncommon_features(false_positive_instances))
+fp_features = get_common_uncommon_features(false_positive_instances)
+fn_features = get_common_uncommon_features(false_negative_instances)
+
+print('False-Positive:')
+for word_pair in fp_features.items():
+   print(f'{word_pair}\n\n')
+
+print('False-Negative:')
+for word_pair in fn_features.items():
+   print(f'{word_pair}\n\n')
+
