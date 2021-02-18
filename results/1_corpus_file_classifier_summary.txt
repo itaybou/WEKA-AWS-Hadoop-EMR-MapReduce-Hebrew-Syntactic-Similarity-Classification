@@ -1,0 +1,41 @@
+
+WEKA Random Forest Classifier Results
+===============================================
+
+Correctly Classified Instances       12120               91.9854 %
+Incorrectly Classified Instances      1056                8.0146 %
+Kappa statistic                          0.3682
+K&B Relative Info Score                 -5.067  %
+K&B Information Score                 -314.7848 bits     -0.0239 bits/instance
+Class complexity | order 0            6212.39   bits      0.4715 bits/instance
+Class complexity | scheme            77568.2153 bits      5.8871 bits/instance
+Complexity improvement     (Sf)     -71355.8253 bits     -5.4156 bits/instance
+Mean absolute error                      0.1411
+Root mean squared error                  0.2639
+Relative absolute error                 77.8398 %
+Root relative squared error             87.6636 %
+Total Number of Instances            13176     
+
+F1 Measure: 0.39931740614334477
+Precision: 0.8162790697674419
+Recall: 0.26430722891566266
+
+True-Positive rate: 0.26430722891566266
+False-Positive rate: 0.006667792032410533
+True-Negative rate: 0.9933322079675895
+False-Negative rate: 0.7356927710843374
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.993    0.736    0.923      0.993    0.957      0.437    0.777     0.957     FALSE
+                 0.264    0.007    0.816      0.264    0.399      0.437    0.777     0.474     TRUE
+Weighted Avg.    0.920    0.662    0.913      0.920    0.901      0.437    0.777     0.908     
+
+=== Confusion Matrix ===
+
+     a     b   <-- classified as
+ 11769    79 |     a = FALSE
+   977   351 |     b = TRUE
+
+===============================================

@@ -83,7 +83,7 @@ public class ARFFCreator {
     }
 
     private static void writeVectorLine(PrintWriter writer, String vector, String classification) {
-        String clearedVector = vector.replaceAll("[\\[\\]\\s+]", "");
+        String clearedVector = vector.replaceAll("[\\[\\]\\s+]", "").replaceAll("NaN", String.valueOf(Double.MIN_VALUE));
         writer.println(String.format("%s,%s", clearedVector, classification.toUpperCase()));
     }
 

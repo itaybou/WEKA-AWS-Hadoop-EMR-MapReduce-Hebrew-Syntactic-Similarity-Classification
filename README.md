@@ -19,6 +19,7 @@ https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Cl
 * [Communication And Statistics](#communication-and-statistics)
 * [Classification Results](#classification-results)
 * [Results Analysis](#results-analysis)
+* [Examples And Resources](#examples-and-resources)
 
 
 ## General Info And Stages
@@ -522,41 +523,41 @@ Comparing the results from both of the expirementes performed (1 corpus file vs.
 WEKA Random Forest Classifier Results
 ===============================================
 
-Correctly Classified Instances       12135               92.0993 %
-Incorrectly Classified Instances      1041                7.9007 %
-Kappa statistic                          0.378 
-K&B Relative Info Score                 -4.1463 %
-K&B Information Score                 -257.5857 bits     -0.0195 bits/instance
+Correctly Classified Instances       12120               91.9854 %
+Incorrectly Classified Instances      1056                8.0146 %
+Kappa statistic                          0.3682
+K&B Relative Info Score                 -5.067  %
+K&B Information Score                 -314.7848 bits     -0.0239 bits/instance
 Class complexity | order 0            6212.39   bits      0.4715 bits/instance
-Class complexity | scheme            16347.7746 bits      1.2407 bits/instance
-Complexity improvement     (Sf)     -10135.3847 bits     -0.7692 bits/instance
-Mean absolute error                      0.1404
-Root mean squared error                  0.2634
-Relative absolute error                 77.4575 %
-Root relative squared error             87.4819 %
+Class complexity | scheme            77568.2153 bits      5.8871 bits/instance
+Complexity improvement     (Sf)     -71355.8253 bits     -5.4156 bits/instance
+Mean absolute error                      0.1411
+Root mean squared error                  0.2639
+Relative absolute error                 77.8398 %
+Root relative squared error             87.6636 %
 Total Number of Instances            13176     
 
-F1 Measure: 0.40885860306643945
-Precision: 0.8314087759815243
-Recall: 0.2710843373493976
+F1 Measure: 0.39931740614334477
+Precision: 0.8162790697674419
+Recall: 0.26430722891566266
 
-True-Positive rate: 0.2710843373493976
-False-Positive rate: 0.006161377447670493
-True-Negative rate: 0.9938386225523295
-False-Negative rate: 0.7289156626506024
+True-Positive rate: 0.26430722891566266
+False-Positive rate: 0.006667792032410533
+True-Negative rate: 0.9933322079675895
+False-Negative rate: 0.7356927710843374
 
 === Detailed Accuracy By Class ===
 
                  TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
-                 0.994    0.729    0.924      0.994    0.958      0.447    0.779     0.960     FALSE
-                 0.271    0.006    0.831      0.271    0.409      0.447    0.780     0.480     TRUE
-Weighted Avg.    0.921    0.656    0.915      0.921    0.902      0.447    0.780     0.912     
+                 0.993    0.736    0.923      0.993    0.957      0.437    0.777     0.957     FALSE
+                 0.264    0.007    0.816      0.264    0.399      0.437    0.777     0.474     TRUE
+Weighted Avg.    0.920    0.662    0.913      0.920    0.901      0.437    0.777     0.908     
 
 === Confusion Matrix ===
 
      a     b   <-- classified as
- 11775    73 |     a = FALSE
-   968   360 |     b = TRUE
+ 11769    79 |     a = FALSE
+   977   351 |     b = TRUE
 
 ===============================================
 ```
@@ -566,66 +567,80 @@ Weighted Avg.    0.921    0.656    0.915      0.921    0.902      0.447    0.780
 WEKA Random Forest Classifier Results
 ===============================================
 
-Correctly Classified Instances       12382               93.4209 %
-Incorrectly Classified Instances       872                6.5791 %
-Kappa statistic                          0.5096
-K&B Relative Info Score                 16.8793 %
-K&B Information Score                 1054.8897 bits      0.0796 bits/instance
+Correctly Classified Instances       12386               93.451  %
+Incorrectly Classified Instances       868                6.549  %
+Kappa statistic                          0.5123
+K&B Relative Info Score                 15.6321 %
+K&B Information Score                  976.9473 bits      0.0737 bits/instance
 Class complexity | order 0            6249.6044 bits      0.4715 bits/instance
-Class complexity | scheme            11377.9096 bits      0.8585 bits/instance
-Complexity improvement     (Sf)      -5128.3051 bits     -0.3869 bits/instance
-Mean absolute error                      0.1186
-Root mean squared error                  0.231 
-Relative absolute error                 65.3878 %
-Root relative squared error             76.7352 %
+Class complexity | scheme            20789.1311 bits      1.5685 bits/instance
+Complexity improvement     (Sf)     -14539.5267 bits     -1.097  bits/instance
+Mean absolute error                      0.1198
+Root mean squared error                  0.2318
+Relative absolute error                 66.092  %
+Root relative squared error             77.0099 %
 Total Number of Instances            13254     
 
-F1 Measure: 0.5386243386243387
-Precision: 0.9187725631768953
-Recall: 0.3809880239520958
+F1 Measure: 0.5412262156448203
+Precision: 0.920863309352518
+Recall: 0.38323353293413176
 
-True-Positive rate: 0.3809880239520958
-False-Positive rate: 0.003775801308944454
-True-Negative rate: 0.9962241986910555
-False-Negative rate: 0.6190119760479041
+True-Positive rate: 0.38323353293413176
+False-Positive rate: 0.0036918946131901326
+True-Negative rate: 0.9963081053868099
+False-Negative rate: 0.6167664670658682
 
 === Detailed Accuracy By Class ===
 
                  TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
-                 0.996    0.619    0.935      0.996    0.965      0.567    0.903     0.985     FALSE
-                 0.381    0.004    0.919      0.381    0.539      0.567    0.903     0.685     TRUE
-Weighted Avg.    0.934    0.557    0.933      0.934    0.922      0.567    0.903     0.954     
+                 0.996    0.617    0.935      0.996    0.965      0.570    0.901     0.984     FALSE
+                 0.383    0.004    0.921      0.383    0.541      0.570    0.901     0.679     TRUE
+Weighted Avg.    0.935    0.555    0.934      0.935    0.922      0.570    0.901     0.953     
 
 === Confusion Matrix ===
 
      a     b   <-- classified as
- 11873    45 |     a = FALSE
-   827   509 |     b = TRUE
+ 11874    44 |     a = FALSE
+   824   512 |     b = TRUE
 
 ===============================================
 ```
 
+#### True/False-Positive/Negative explained:
+**True-Positive** - is an outcome where the model correctly predicts the positive class.  
+**True-Negative** - is an outcome where the model correctly predicts the negative class.  
+**False-Positive** - is an outcome where the model incorrectly predicts the positive class.  
+**False-Negative** - is an outcome where the model incorrectly predicts the negative class.  
+
 ### Conclusions:
-We can see that using more corpus files managed to improve the Correctly Classified Instances from 92.0993 % to 93.4209 % when using 15 corpus files instead of the 1 file used in the first expirement (and to also decrease the Incorrectly Classified Instances from 7.9007 % to 6.5791 %).  
+We can see that using more corpus files managed to improve the Correctly Classified Instances from 91.9854% to 93.451% when using 15 corpus files instead of the 1 file used in the first expirement (and to also decrease the Incorrectly Classified Instances from 8.0146% to 6.549%).  
 We can conclude that using more information produced a more accurate and distinguishable similarity vectors that the classifier classified more accurately.  
-We can also see that the precision, recall and F1 measure improved between the two expirements.  <br/>
-When running on 1 corpus file we got:
+We can also see that the precision, recall and F1 measure improved between the two expirements.<br/><br/>
+**When running on 1 corpus file we got**:
 ```
-F1 Measure: 0.40885860306643945
-Precision: 0.8314087759815243
-Recall: 0.2710843373493976
+F1 Measure: 0.39931740614334477
+Precision: 0.8162790697674419
+Recall: 0.26430722891566266
 ```
-While when running on 15 corpus files we got:
+**While when running on 15 corpus files we got**:
 ```
-F1 Measure: 0.5386243386243387
-Precision: 0.9187725631768953
-Recall: 0.3809880239520958
+F1 Measure: 0.5412262156448203
+Precision: 0.920863309352518
+Recall: 0.38323353293413176
 ```
+
+### 15 Corpus Files Classification Results Distribution Visualization:
+***(Using WEKA GUI, link in the Examples And Resources section)***
+![Classification Results Visualization](https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification/blob/main/results/classification_error_chart.png)
 
 ## Examples And Resources
 - After compiling the project - project JAR files can be found in the projects target directory.
+- WEKA GUI download: [WEKA GUI download page link](https://waikato.github.io/weka-wiki/downloading_weka/)
 - Example for the ```inputs.txt``` text file format needed to run the project can be found in the projects GitHub resources directory.
-- Example for the Golden Standard word pair classification text file can be fount under the name ```word-relatedness.txt``` in the projects GitHub resources directory.
+- Example for the Golden Standard word pair classification text file can be found under the name ```word-relatedness.txt``` in the projects GitHub resources directory.
+- An example of how the 4 co-occurrence vectors (Plain, Relative, PMI, T-Test) including all the lexemes relevant features looks like can be found in the analysis folder under the name ```co_occurrence_vectors_example.txt```.
+- WEKA classifier ARFF input file example can be found in the results directory of the project under the name ```word_pair_similarity.arff```.
+
 
 
 
