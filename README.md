@@ -1,5 +1,5 @@
-# WEKA-AWS-Hadoop-EMR-MapReduce-Hebrew-Syntactic-Similarity-Classification
-WEKA/AWS/Hadoop Elastic Map Reduce application to measure and classify word pair similarity 
+# WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification
+WEKA/AWS/Hadoop Elastic Map Reduce application to measure and classify word pair similarity. 
 
 Project GitHub repository link:  
 https://github.com/itaybou/WEKA-AWS-Hadoop-EMR-MapReduce-Syntactic-Similarity-Classification
